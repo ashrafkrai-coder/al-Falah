@@ -3,132 +3,250 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#4c1d95">
+<meta name="theme-color" content="#111827">
 <title>myPI SPM</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
- --bg:#efe4fa;--bg-a1:rgba(139,92,246,.16);--bg-a2:rgba(76,29,149,.08);
- --card:#f7effc;--card-a:rgba(247,239,252,.92);--line:#c9a4e8;
- --text:#1c1730;--muted:#6f6a85;--dark:#4c1d95;--dark2:#6d28d9;
- --accent:#7c3aed;--accent2:#e879f9;
- --r-lg:20px;--r-md:14px;--r-sm:11px;
- --sh-sm:0 2px 8px rgba(76,29,149,.07);--sh-md:0 10px 28px rgba(76,29,149,.13);--sh-lg:0 20px 45px rgba(76,29,149,.18)
+ --bg:#F6F7F9;--surface:#FFFFFF;
+ --primary:#111827;--primary-hover:#1F2937;
+ --text:#111827;--muted:#6B7280;--line:#E5E7EB;
+ --accent:#B89B5E;--accent-soft:#F4EFE3;
+ --success:#166534;--success-soft:#ECFDF3;
+ --warning:#92400E;--warning-soft:#FEF6E7;
+ --danger:#991B1B;--danger-soft:#FDECEC;
+ --info:#334155;--info-soft:#EEF2F6;
+ --r-lg:16px;--r-md:14px;--r-sm:12px;
+ --sh-sm:0 2px 10px rgba(0,0,0,.035);--sh-md:0 6px 20px rgba(0,0,0,.07)
 }
 *{box-sizing:border-box}html{scroll-behavior:smooth}
-body{margin:0;font-family:'Plus Jakarta Sans',Arial,Helvetica,sans-serif;color:var(--text);padding-bottom:86px;
- background:radial-gradient(1100px 500px at 100% -10%,var(--bg-a1),transparent 60%),radial-gradient(900px 500px at -10% 0%,var(--bg-a2),transparent 55%),var(--bg);
- background-attachment:fixed;-webkit-font-smoothing:antialiased}
-::selection{background:var(--accent2);color:#fff}
-::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:#ddccf0;border-radius:999px}::-webkit-scrollbar-thumb:hover{background:#c8adea}
-.shell{max-width:960px;margin:auto;padding:20px 16px}
-.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
-.brand{display:flex;align-items:center;gap:12px}
-.brand .logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--dark),var(--dark2));display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:var(--sh-md);flex:0 0 auto}
-.brand h1{font-size:21px;margin:0;font-weight:800;letter-spacing:-.02em}.brand p{font-size:12px;color:var(--muted);margin:2px 0 0;font-weight:500}
-.homebtn{border:2px solid var(--line);background:var(--card-a);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-radius:var(--r-sm);padding:10px 14px;font-weight:700;cursor:pointer;box-shadow:var(--sh-sm);transition:all .18s ease;color:var(--text)}
-.homebtn:hover{transform:translateY(-1px);box-shadow:var(--sh-md);border-color:#d9c8ef}.homebtn:active{transform:translateY(0)}
-.page{display:none}.page.active{display:block;animation:fadeIn .35s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.card{background:var(--card-a);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:2px solid var(--line);border-radius:var(--r-lg);padding:18px;margin-bottom:14px;box-shadow:var(--sh-sm)}
-h2{font-size:21px;margin:0 0 5px;font-weight:800;letter-spacing:-.01em}h3{font-size:14px;margin:0 0 12px;font-weight:800;letter-spacing:-.01em}.sub{color:var(--muted);font-size:13px;margin:0 0 16px;line-height:1.5}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.full{grid-column:1/-1}
-.stat{position:relative;background:var(--card);border:2px solid var(--line);border-radius:var(--r-md);padding:14px;min-height:86px;overflow:hidden;box-shadow:var(--sh-sm);transition:transform .2s ease,box-shadow .2s ease}
-.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
-.stat:hover{transform:translateY(-2px);box-shadow:var(--sh-md)}
-.stat strong{font-size:24px;display:block;margin-bottom:4px;font-weight:800;letter-spacing:-.02em;background:linear-gradient(135deg,var(--dark),var(--dark2));-webkit-background-clip:text;background-clip:text;color:transparent}
-.stat span{font-size:11px;color:var(--muted);font-weight:600}
-label{display:block;font-size:11px;font-weight:700;margin-bottom:6px;color:#5b5470;text-transform:uppercase;letter-spacing:.04em}
+body{margin:0;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);padding-bottom:84px;-webkit-font-smoothing:antialiased}
+::selection{background:var(--accent-soft);color:var(--text)}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:#D8DBE0;border-radius:999px}::-webkit-scrollbar-thumb:hover{background:#C5C9D1}
+
+/* Header */
+.topbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar-inner{max-width:1160px;margin:auto;padding:9px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:52px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand-mark{width:34px;height:34px;border-radius:10px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:16px;flex:0 0 auto}
+.brand-text{display:flex;flex-direction:column;line-height:1.25;min-width:0}
+.brand-text strong{font-size:15px;font-weight:700;letter-spacing:-.01em;color:var(--text)}
+.brand-text span{font-size:11px;color:var(--muted);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:190px}
+.topbar-actions{display:flex;align-items:center;gap:7px;flex:0 0 auto}
+.status-pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--success);background:var(--success-soft);padding:6px 10px;border-radius:999px}
+.status-pill.is-offline{color:var(--danger);background:var(--danger-soft)}
+.status-pill .dot{width:6px;height:6px;border-radius:999px;background:currentColor;flex:0 0 auto}
+.icon-btn,.avatar-btn{width:38px;height:38px;min-width:38px;min-height:38px;border-radius:11px;border:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);transition:all .15s ease;padding:0}
+.icon-btn:hover,.avatar-btn:hover{border-color:var(--accent);color:var(--primary);transform:translateY(-1px)}
+.icon-btn:active,.avatar-btn:active{transform:translateY(0)}
+.icon-btn svg,.avatar-btn svg{width:18px;height:18px}
+.avatar-btn{background:var(--primary);color:#fff;border-color:var(--primary)}
+.avatar-btn:hover{background:var(--primary-hover);color:#fff}
+
+/* Shell / pages */
+.shell{max-width:1160px;margin:auto;padding:16px}
+.page{display:none}.page.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.page-title{font-size:22px;margin:2px 0 2px;font-weight:700;letter-spacing:-.01em;color:var(--text)}
+.page-sub{color:var(--muted);font-size:13px;margin:0 0 16px}
+
+/* Card */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px;margin-bottom:12px;box-shadow:var(--sh-sm)}
+h2{font-size:19px;margin:0 0 4px;font-weight:700;letter-spacing:-.01em;color:var(--text)}
+h3{font-size:15px;margin:0 0 10px;font-weight:700;letter-spacing:-.01em;color:var(--text)}
+.sub{color:var(--muted);font-size:13px;margin:0 0 14px;line-height:1.5}
+
+/* Grid utilities */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}
+
+/* KPI cards */
+.kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:13px;box-shadow:var(--sh-sm);transition:transform .15s ease,box-shadow .15s ease}
+.kpi:hover{transform:translateY(-1px);box-shadow:var(--sh-md)}
+.kpi-icon{width:28px;height:28px;border-radius:8px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;margin-bottom:9px}
+.kpi-icon svg{width:15px;height:15px}
+.kpi strong{display:block;font-size:21px;font-weight:700;letter-spacing:-.02em;color:var(--primary)}
+.kpi span{font-size:11px;color:var(--muted);font-weight:600}
+@media(min-width:720px){.kpi-grid{grid-template-columns:repeat(4,1fr)}}
+
+/* Form fields */
+label{display:block;font-size:11px;font-weight:600;margin-bottom:6px;color:#374151;text-transform:uppercase;letter-spacing:.03em}
 input,select,textarea,button{font:inherit}
-input,select,textarea{width:100%;border:2px solid var(--line);border-radius:var(--r-sm);padding:11px 12px;background:#faf6fd;color:var(--text);transition:border-color .15s ease,box-shadow .15s ease}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(124,58,237,.14)}
-textarea{resize:vertical}
-.btn{border:0;border-radius:var(--r-sm);padding:12px 16px;background:linear-gradient(135deg,var(--dark),var(--dark2));color:#fff;font-weight:700;cursor:pointer;box-shadow:var(--sh-sm);transition:transform .15s ease,box-shadow .15s ease,filter .15s ease}
-.btn:hover{filter:brightness(1.12);box-shadow:var(--sh-md);transform:translateY(-1px)}.btn:active{transform:translateY(0)}
-.btn.secondary{background:#faf6fd;color:var(--text);border:2px solid var(--line);box-shadow:none}.btn.secondary:hover{border-color:var(--accent);color:var(--accent)}
-.btn.small{padding:8px 11px;font-size:12px;width:auto}.btn.danger{background:linear-gradient(135deg,#991b1b,#7f1d1d)}.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.actions{display:flex;gap:8px;flex-wrap:wrap}.status{font-size:13px;color:var(--muted);margin-top:12px;font-weight:500}
-.menu{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.menu button{text-align:left;border:2px solid var(--line);border-radius:var(--r-md);background:var(--card);padding:14px;color:inherit;cursor:pointer;display:flex;flex-direction:column;gap:2px;box-shadow:var(--sh-sm);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
-.menu button:hover{transform:translateY(-3px);box-shadow:var(--sh-md);border-color:#dccdef}
-.menu .menuicon{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,rgba(124,58,237,.15),rgba(232,121,249,.15));display:flex;align-items:center;justify-content:center;margin-bottom:6px;color:var(--accent)}
-.menu .menuicon svg{width:18px;height:18px}
-.menu b{display:block;font-size:14px;margin-bottom:2px;font-weight:700}.menu span{font-size:11px;color:var(--muted);font-weight:500}
+input,select,textarea{width:100%;min-height:46px;border:1px solid var(--line);border-radius:var(--r-sm);padding:11px 13px;background:#fff;color:var(--text);font-size:14px;transition:border-color .15s ease,box-shadow .15s ease}
+textarea{min-height:auto;resize:vertical;line-height:1.5}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.formsection{border:1px solid var(--line);border-radius:var(--r-md);padding:14px;margin-bottom:12px;background:#FBFBFC}
+.formsection h4{margin:0 0 11px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--accent)}
+
+/* Buttons */
+.btn{border:0;border-radius:var(--r-sm);padding:12px 16px;min-height:46px;background:var(--primary);color:#fff;font-weight:600;font-size:14px;cursor:pointer;box-shadow:var(--sh-sm);transition:all .15s ease}
+.btn:hover{background:var(--primary-hover);box-shadow:var(--sh-md);transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn.secondary{background:#fff;color:var(--text);border:1px solid #D1D5DB;box-shadow:none}
+.btn.secondary:hover{border-color:var(--primary);background:#F9FAFB}
+.btn.small{padding:8px 12px;font-size:12px;width:auto;min-height:36px}
+.btn.danger{background:var(--danger)}.btn.danger:hover{background:#7f1616}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.status{font-size:13px;color:var(--muted);margin-top:11px;font-weight:500;display:flex;align-items:center}
+
+/* Spinner */
+.spinner{width:15px;height:15px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;display:inline-block;animation:spin .7s linear infinite;margin-right:7px;flex:0 0 auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Skeleton loader */
+.skel-item{border:1px solid var(--line);border-radius:var(--r-md);padding:13px;background:var(--surface)}
+.skel-line{height:10px;border-radius:6px;background:linear-gradient(90deg,#EEF0F3 25%,#F5F6F8 37%,#EEF0F3 63%);background-size:400% 100%;animation:shimmer 1.4s ease infinite;margin-bottom:7px}
+.skel-line:last-child{margin-bottom:0}
+.skel-line.w40{width:40%}.skel-line.w60{width:60%}.skel-line.w90{width:90%}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+
+/* Module list (main menu) */
+.module-list{display:grid;gap:8px}
+.module-row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface);padding:12px 14px;cursor:pointer;box-shadow:var(--sh-sm);transition:all .15s ease;min-height:64px;color:inherit}
+.module-row:hover{border-color:var(--accent);box-shadow:var(--sh-md);transform:translateY(-1px)}
+.module-icon{width:38px;height:38px;border-radius:10px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.module-icon svg{width:18px;height:18px}
+.module-text{flex:1;min-width:0}
+.module-text b{display:block;font-size:14px;font-weight:600;color:var(--text)}
+.module-text span{font-size:12px;color:var(--muted);display:block;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.module-arrow{color:#9CA3AF;flex:0 0 auto;display:flex}
+.module-arrow svg{width:16px;height:16px}
+@media(min-width:720px){.module-list{grid-template-columns:1fr 1fr}}
+
+/* Lists / items */
 .list{display:grid;gap:9px}
-.item{border:2px solid var(--line);border-radius:var(--r-md);padding:13px;background:var(--card);box-shadow:var(--sh-sm);transition:box-shadow .18s ease,transform .18s ease}
+.item{border:1px solid var(--line);border-radius:var(--r-md);padding:13px;background:var(--surface);box-shadow:var(--sh-sm);transition:box-shadow .15s ease,transform .15s ease}
 .item:hover{box-shadow:var(--sh-md);transform:translateY(-1px)}
-.itemtitle{font-weight:700;font-size:13px}.meta{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.5}
-.pill{display:inline-block;border-radius:999px;padding:4px 9px;background:#f2ecfa;border:2px solid var(--line);font-size:10px;margin-right:4px;font-weight:700;color:#5b21b6;letter-spacing:.02em}
-.tablewrap{overflow:auto;border:2px solid var(--line);border-radius:var(--r-md);background:var(--card);box-shadow:var(--sh-sm)}
-table{width:100%;border-collapse:collapse;min-width:620px}th,td{padding:11px;border-bottom:1px solid #f0e9f9;text-align:left;font-size:12px;vertical-align:top}
-th{font-size:10px;color:var(--muted);background:#faf8fd;font-weight:800;text-transform:uppercase;letter-spacing:.05em;position:sticky;top:0}
-tbody tr{transition:background .15s ease}tbody tr:hover{background:#faf7fd}
-.bar{height:7px;background:#f0e9f9;border-radius:999px;overflow:hidden;margin-top:6px}.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:999px}
-.qbox{border:2px solid var(--line);border-radius:var(--r-md);padding:14px;margin-top:9px;background:linear-gradient(180deg,#faf8fd,#f5eefb)}.qbox b{font-size:13px}
-.opt{display:block;border:2px solid var(--line);border-radius:var(--r-sm);padding:10px;margin:7px 0;background:#faf6fd;cursor:pointer;transition:border-color .15s ease,background .15s ease}
-.opt:hover{border-color:#d3c0ea}.opt:has(input:checked){border-color:var(--accent);background:rgba(124,58,237,.08)}.opt input{width:auto;margin-right:7px}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.88);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-top:1px solid var(--line);display:flex;justify-content:center;z-index:10;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -10px 30px rgba(76,29,149,.08)}
-.bottom .inner{max-width:960px;width:100%;display:grid;grid-template-columns:repeat(5,1fr)}
-.navbtn{border:0;background:transparent;padding:11px 2px 9px;font-size:10px;color:#4b5563;cursor:pointer;font-weight:700;transition:color .15s ease,transform .15s ease}
-.navbtn b{display:block;margin-bottom:3px;font-weight:400}.navbtn b svg{width:20px;height:20px;display:block;margin:0 auto}.navbtn:hover{color:var(--dark);transform:translateY(-1px)}.navbtn:active{transform:translateY(0)}
-.modal{position:fixed;inset:0;background:rgba(44,20,80,.5);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);display:none;align-items:flex-end;justify-content:center;z-index:30}
+.itemtitle{font-weight:600;font-size:13px;color:var(--text)}
+.meta{font-size:11.5px;color:var(--muted);margin-top:5px;line-height:1.55}
+.review-meta{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px}
+.review-question{font-size:13px;font-weight:600;line-height:1.55;color:var(--text)}
+.review-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:11px;padding-top:11px;border-top:1px solid var(--line)}
+.review-score{font-size:12px;color:var(--muted);font-weight:600}
+
+/* Tags & status badges */
+.tag{display:inline-block;border-radius:6px;padding:3px 8px;font-size:10px;font-weight:600;background:#F3F4F6;color:#4B5563;margin-right:4px}
+.badge{display:inline-block;border-radius:999px;padding:4px 10px;font-size:10px;font-weight:700;letter-spacing:.02em}
+.badge-success{background:var(--success-soft);color:var(--success)}
+.badge-warning{background:var(--warning-soft);color:var(--warning)}
+.badge-danger{background:var(--danger-soft);color:var(--danger)}
+.badge-info{background:var(--info-soft);color:var(--info)}
+
+/* Empty state */
+.empty-state{grid-column:1/-1;text-align:center;padding:34px 16px;color:var(--muted)}
+.empty-icon{width:44px;height:44px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.empty-icon svg{width:22px;height:22px}
+.empty-state b{display:block;font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px}
+.empty-state span{font-size:12px;line-height:1.5;display:block;max-width:300px;margin:0 auto}
+
+/* Progress bar */
+.bar{height:7px;background:#EEF0F3;border-radius:999px;overflow:hidden;margin-top:8px}
+.bar>i{display:block;height:100%;background:var(--accent);border-radius:999px}
+
+/* Question / AI result boxes */
+.qbox{border:1px solid var(--line);border-radius:var(--r-md);padding:13px;margin-top:8px;background:#FBFBFC}
+.qbox b{font-size:13px}
+.ai-title{font-size:14px;font-weight:700;margin:2px 0 10px;color:var(--text)}
+.ai-section{border:1px solid var(--line);border-radius:var(--r-sm);padding:11px 13px;margin-bottom:8px;background:#FBFBFC}
+.ai-section:last-child{margin-bottom:0}
+.ai-section h4{margin:0 0 4px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--accent)}
+.ai-section p{margin:0;font-size:13px;line-height:1.6;color:var(--text);white-space:pre-line}
+
+/* Quiz options */
+.opt{display:block;border:1px solid var(--line);border-radius:var(--r-sm);padding:10px 12px;margin:7px 0;background:#fff;cursor:pointer;transition:border-color .15s ease,background .15s ease}
+.opt:hover{border-color:#C9CDD4}
+.opt:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.opt input{width:auto;min-height:auto;margin-right:8px}
+
+/* Bottom navigation */
+.bottomnav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.96);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:1px solid var(--line);z-index:20;padding-bottom:env(safe-area-inset-bottom)}
+.bottomnav-inner{max-width:1160px;margin:auto;display:grid;grid-template-columns:repeat(5,1fr)}
+.navbtn{border:0;background:transparent;padding:9px 2px;font-size:10px;color:var(--muted);cursor:pointer;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:4px;transition:color .15s ease;position:relative;min-height:48px}
+.navbtn svg{width:20px;height:20px}
+.navbtn .navdot{width:4px;height:4px;border-radius:999px;background:var(--accent);position:absolute;top:3px;opacity:0;transition:opacity .15s ease}
+.navbtn.active{color:var(--primary)}
+.navbtn.active .navdot{opacity:1}
+
+/* Modal */
+.modal{position:fixed;inset:0;background:rgba(17,24,39,.5);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);display:none;align-items:flex-end;justify-content:center;z-index:30}
 .modal.show{display:flex;animation:fadeIn .2s ease}
-.sheet{background:#f7effc;width:100%;max-width:960px;max-height:90vh;overflow:auto;border-radius:24px 24px 0 0;padding:20px;box-shadow:0 -20px 50px rgba(76,29,149,.24);animation:slideUp .28s cubic-bezier(.2,.8,.2,1)}
-@keyframes slideUp{from{transform:translateY(24px);opacity:.6}to{transform:translateY(0);opacity:1}}
-.close{float:right;border:0;background:#f2ecfa;border-radius:var(--r-sm);padding:8px 12px;cursor:pointer;font-weight:700;transition:background .15s ease}.close:hover{background:#e6d5f7}
-@media(max-width:700px){.grid4{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.full{grid-column:auto}.menu{grid-template-columns:1fr 1fr}.shell{padding:14px 12px}}
+.sheet{background:#fff;width:100%;max-width:960px;max-height:90vh;overflow:auto;border-radius:22px 22px 0 0;padding:20px;box-shadow:0 -18px 44px rgba(17,24,39,.18);animation:slideUp .25s cubic-bezier(.2,.8,.2,1)}
+@keyframes slideUp{from{transform:translateY(22px);opacity:.6}to{transform:translateY(0);opacity:1}}
+.close{float:right;border:1px solid var(--line);background:#fff;border-radius:var(--r-sm);padding:8px 12px;cursor:pointer;font-weight:600;transition:all .15s ease;color:var(--muted)}
+.close:hover{border-color:var(--primary);color:var(--primary)}
+
+@media(max-width:700px){.grid2{grid-template-columns:1fr}.full{grid-column:auto}.shell{padding:14px 12px}}
 </style>
 </head>
 <body>
-<div class="shell">
-  <div class="top">
-    <div class="brand"><div class="logo">📖</div><div><h1>myPI SPM</h1><p>Portal Pendidikan Islam Tingkatan 4 & 5</p></div></div>
-    <button class="homebtn" onclick="showPage('dashboard')">⌂ Dashboard</button>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-mark">📖</div>
+      <div class="brand-text"><strong>myPI SPM</strong><span>Portal Pendidikan Islam</span></div>
+    </div>
+    <div class="topbar-actions">
+      <span class="status-pill" id="portalStatus"><i class="dot"></i>Online</span>
+      <button class="icon-btn" onclick="refreshCurrentPage()" title="Muat semula" aria-label="Muat semula">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v6h6"/><path d="M20 20v-6h-6"/><path d="M5.5 15a8 8 0 0 0 13.6 2.9L20 16"/><path d="M18.5 9a8 8 0 0 0-13.6-2.9L4 8"/></svg>
+      </button>
+      <button class="avatar-btn" onclick="showPage('dashboard')" title="Dashboard" aria-label="Dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M5 19.5c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg>
+      </button>
+    </div>
   </div>
+</header>
+
+<div class="shell">
 
   <!-- DASHBOARD -->
   <section id="page-dashboard" class="page active">
-    <div class="grid4">
-      <div class="stat"><strong id="dSoalan">–</strong><span>Jumlah Soalan</span></div>
-      <div class="stat"><strong id="dLulus">–</strong><span>Soalan Lulus</span></div>
-      <div class="stat"><strong id="dKuiz">–</strong><span>Kuiz Aktif</span></div>
-      <div class="stat"><strong id="dRespons">–</strong><span>Respons Murid</span></div>
-      <div class="stat"><strong id="dPurata">–</strong><span>Purata Markah</span></div>
-      <div class="stat"><strong id="dRph">–</strong><span>Jumlah RPH</span></div>
-      <div class="stat"><strong id="dSemak">–</strong><span>Jawapan Perlu Semak</span></div>
-      <div class="stat"><strong id="dMurid">–</strong><span>Murid Aktif</span></div>
+    <h1 class="page-title">Assalamualaikum, Guru</h1>
+    <p class="page-sub">Ringkasan myPI SPM hari ini</p>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16"/><path d="M4 12h10"/><path d="M4 18h7"/></svg></div><strong id="dSoalan">–</strong><span>Jumlah Soalan</span></div>
+      <div class="kpi"><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg></div><strong id="dLulus">–</strong><span>Soalan Lulus</span></div>
+      <div class="kpi"><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 12h6"/><path d="M9 16h4"/></svg></div><strong id="dKuiz">–</strong><span>Kuiz Aktif</span></div>
+      <div class="kpi"><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h4l2 3h4l2-3h4"/><path d="M4 12 5.5 5h13L20 12"/><path d="M4 12v6a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></div><strong id="dRespons">–</strong><span>Respons Murid</span></div>
+      <div class="kpi"><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V8"/><path d="M12 16V4"/><path d="M18 16v-6"/><path d="M3 20h18"/></svg></div><strong id="dPurata">–</strong><span>Purata Markah</span></div>
+      <div class="kpi"><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6.5A2.5 2.5 0 0 1 4 17.5v-12Z"/><path d="M8 7h8"/></svg></div><strong id="dRph">–</strong><span>Jumlah RPH</span></div>
+      <div class="kpi"><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><strong id="dSemak">–</strong><span>Perlu Semakan</span></div>
+      <div class="kpi"><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><circle cx="17" cy="8.5" r="2.3"/><path d="M15.5 14.3c2.3.3 4 2 4 4.7"/></svg></div><strong id="dMurid">–</strong><span>Murid Aktif</span></div>
     </div>
-    <div class="card" style="margin-top:11px"><h3>Menu Utama</h3><div class="menu">
-      <button onclick="showPage('jana')"><span class="menuicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg></span><b>Jana Soalan AI</b><span>DSKP → soalan & skema</span></button>
-      <button onclick="showPage('bank')"><span class="menuicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg></span><b>Semak Bank Soalan</b><span>Edit, Lulus atau Tolak</span></button>
-      <button onclick="showPage('guru-kuiz')"><span class="menuicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3.5h6a1 1 0 0 1 1 1V6H8V4.5a1 1 0 0 1 1-1Z"/><path d="M9.5 17.5 9 19.5l2-.5 5-5-1.5-1.5-5 5Z"/></svg></span><b>Bina & Urus Kuiz</b><span>Jana kod dan tutup kuiz</span></button>
-      <button onclick="showPage('kuiz')"><span class="menuicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L18.5 9.5a2 2 0 0 0 0-2.8l-1.2-1.2a2 2 0 0 0-2.8 0L4 16v4Z"/><path d="M13 6l3 3"/></svg></span><b>Kuiz Murid</b><span>Jawab menggunakan kod</span></button>
-      <button onclick="showPage('semak-jawapan')"><span class="menuicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12.5l2.5 2.5L16.5 9"/></svg></span><b>Semak Jawapan</b><span>Struktur/Esei</span></button>
-      <button onclick="showPage('analisis')"><span class="menuicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21v-6M10.5 21V9M16 21v-4"/><path d="M4 8.5 9 5l4 3 6-5"/></svg></span><b>Analisis Prestasi</b><span>Topik lemah & intervensi</span></button>
-      <button onclick="showPage('rph')"><span class="menuicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5h7l4 4V20a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z"/><path d="M14 3.5V8h4.5"/><path d="M12 12v5M9.5 14.5h5"/></svg></span><b>Jana RPH</b><span>RPT + DSKP + AI</span></button>
-      <button onclick="showPage('rekod-rph')"><span class="menuicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="4" rx="1"/><path d="M4.5 8.5V18a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1V8.5"/><path d="M10 13h4"/></svg></span><b>Rekod RPH</b><span>Semak, edit & cetak</span></button>
-      <button onclick="showPage('murid')"><span class="menuicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><circle cx="17" cy="8.5" r="2.3"/><path d="M15.5 14.3c2.3.3 4 2 4 4.7"/></svg></span><b>Pengurusan Murid</b><span>Tambah dan kemas kini murid</span></button>
+    <div class="card" style="margin-top:12px"><h3>Menu Utama</h3><div class="module-list">
+      <button class="module-row" onclick="showPage('jana')"><span class="module-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg></span><span class="module-text"><b>Jana Soalan AI</b><span>Jana soalan berdasarkan DSKP</span></span><span class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></button>
+      <button class="module-row" onclick="showPage('bank')"><span class="module-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg></span><span class="module-text"><b>Semak Bank Soalan</b><span>Edit dan luluskan soalan</span></span><span class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></button>
+      <button class="module-row" onclick="showPage('guru-kuiz')"><span class="module-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3.5h6a1 1 0 0 1 1 1V6H8V4.5a1 1 0 0 1 1-1Z"/><path d="M9.5 17.5 9 19.5l2-.5 5-5-1.5-1.5-5 5Z"/></svg></span><span class="module-text"><b>Bina & Urus Kuiz</b><span>Jana kod dan urus status kuiz</span></span><span class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></button>
+      <button class="module-row" onclick="showPage('kuiz')"><span class="module-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L18.5 9.5a2 2 0 0 0 0-2.8l-1.2-1.2a2 2 0 0 0-2.8 0L4 16v4Z"/><path d="M13 6l3 3"/></svg></span><span class="module-text"><b>Kuiz Murid</b><span>Jawab kuiz menggunakan kod</span></span><span class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></button>
+      <button class="module-row" onclick="showPage('semak-jawapan')"><span class="module-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12.5l2.5 2.5L16.5 9"/></svg></span><span class="module-text"><b>Semak Jawapan</b><span>Tanda jawapan struktur & esei</span></span><span class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></button>
+      <button class="module-row" onclick="showPage('analisis')"><span class="module-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21v-6M10.5 21V9M16 21v-4"/><path d="M4 8.5 9 5l4 3 6-5"/></svg></span><span class="module-text"><b>Analisis Prestasi</b><span>Topik lemah & murid perlu bantuan</span></span><span class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></button>
+      <button class="module-row" onclick="showPage('rph')"><span class="module-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5h7l4 4V20a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z"/><path d="M14 3.5V8h4.5"/><path d="M12 12v5M9.5 14.5h5"/></svg></span><span class="module-text"><b>Jana RPH</b><span>RPT + DSKP + AI</span></span><span class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></button>
+      <button class="module-row" onclick="showPage('rekod-rph')"><span class="module-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="4" rx="1"/><path d="M4.5 8.5V18a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1V8.5"/><path d="M10 13h4"/></svg></span><span class="module-text"><b>Rekod RPH</b><span>Semak, kemas kini & cetak</span></span><span class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></button>
+      <button class="module-row" onclick="showPage('murid')"><span class="module-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><circle cx="17" cy="8.5" r="2.3"/><path d="M15.5 14.3c2.3.3 4 2 4 4.7"/></svg></span><span class="module-text"><b>Pengurusan Murid</b><span>Tambah & kemas kini rekod murid</span></span><span class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></button>
     </div></div>
     <div class="grid2">
-      <div class="card"><h3>RPH Terkini</h3><div id="dashRph" class="list"><span class="sub">Memuatkan...</span></div></div>
-      <div class="card"><h3>Kuiz Terkini</h3><div id="dashQuiz" class="list"><span class="sub">Memuatkan...</span></div></div>
+      <div class="card"><h3>RPH Terkini</h3><div id="dashRph" class="list"><div class="skel-item"><div class="skel-line w40"></div><div class="skel-line w90"></div></div><div class="skel-item"><div class="skel-line w40"></div><div class="skel-line w60"></div></div></div></div>
+      <div class="card"><h3>Kuiz Terkini</h3><div id="dashQuiz" class="list"><div class="skel-item"><div class="skel-line w40"></div><div class="skel-line w90"></div></div><div class="skel-item"><div class="skel-line w40"></div><div class="skel-line w60"></div></div></div></div>
     </div>
   </section>
 
   <!-- JANA SOALAN -->
   <section id="page-jana" class="page">
     <div class="card"><h2>Jana Soalan AI</h2><p class="sub">Soalan dijana berdasarkan SK/SP DSKP yang telah disemak.</p>
-      <div class="grid2">
+      <div class="formsection"><h4>Kandungan DSKP</h4><div class="grid2">
         <div><label>Tingkatan</label><select id="jT"><option value="">Pilih</option><option>4</option><option>5</option></select></div>
         <div><label>Bidang</label><select id="jB"><option value="">Pilih Tingkatan dahulu</option></select></div>
         <div class="full"><label>Tajuk</label><select id="jTaj"><option value="">Pilih Bidang dahulu</option></select></div>
+      </div></div>
+      <div class="formsection"><h4>Tetapan Soalan</h4><div class="grid2">
         <div><label>Tahap</label><select id="jTahap"></select></div>
         <div><label>Jenis</label><select id="jJenis"></select></div>
-        <div><label>Bilangan</label><input id="jBil" type="number" min="1" max="20" value="5"></div>
-        <div style="align-self:end"><button class="btn" id="jBtn" onclick="janaSoalan()">Jana & Simpan</button></div>
-      </div>
+        <div class="full"><label>Bilangan</label><input id="jBil" type="number" min="1" max="20" value="5"></div>
+      </div></div>
+      <button class="btn" id="jBtn" onclick="janaSoalan()">Jana & Simpan</button>
       <div id="jStatus" class="status"></div><div id="jResult"></div>
     </div>
   </section>
@@ -182,19 +300,19 @@ tbody tr{transition:background .15s ease}tbody tr:hover{background:#faf7fd}
   <section id="page-semak-jawapan" class="page">
     <div class="card"><h2>Semak Jawapan Struktur / Esei</h2><p class="sub">Masukkan markah sehingga nilai Markah Penuh.</p>
       <input id="sjQuery" placeholder="Cari nama / kelas / kuiz..." oninput="loadManualDebounced()">
-      <div id="sjStatus" class="status"></div><div id="sjList" class="list"></div>
+      <div id="sjStatus" class="status"></div><div id="sjList" class="list" style="margin-top:10px"></div>
     </div>
   </section>
 
   <!-- ANALISIS -->
   <section id="page-analisis" class="page">
-    <div class="grid4">
-      <div class="stat"><strong id="aResp">–</strong><span>Respons</span></div>
-      <div class="stat"><strong id="aAvg">–</strong><span>Purata</span></div>
-      <div class="stat"><strong id="aPending">–</strong><span>Belum Semak</span></div>
-      <div class="stat"><strong id="aInter">–</strong><span>Perlu Intervensi</span></div>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h4l2 3h4l2-3h4"/><path d="M4 12 5.5 5h13L20 12"/><path d="M4 12v6a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></div><strong id="aResp">–</strong><span>Respons</span></div>
+      <div class="kpi"><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V8"/><path d="M12 16V4"/><path d="M18 16v-6"/><path d="M3 20h18"/></svg></div><strong id="aAvg">–</strong><span>Purata</span></div>
+      <div class="kpi"><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><strong id="aPending">–</strong><span>Belum Semak</span></div>
+      <div class="kpi"><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 21 19H3Z"/><path d="M12 9.5v4"/><path d="M12 16.5h.01"/></svg></div><strong id="aInter">–</strong><span>Perlu Intervensi</span></div>
     </div>
-    <div class="card" style="margin-top:11px"><h3>Prestasi Mengikut Kuiz</h3><div id="aQuiz" class="tablewrap"></div></div>
+    <div class="card" style="margin-top:12px"><h3>Prestasi Mengikut Kuiz</h3><div id="aQuiz" class="list"></div></div>
     <div class="grid2">
       <div class="card"><h3>Topik Paling Lemah</h3><div id="aTopic" class="list"></div></div>
       <div class="card"><h3>Murid Perlu Intervensi</h3><div id="aStudents" class="list"></div></div>
@@ -204,15 +322,19 @@ tbody tr{transition:background .15s ease}tbody tr:hover{background:#faf7fd}
   <!-- JANA RPH -->
   <section id="page-rph" class="page">
     <div class="card"><h2>Jana RPH</h2><p class="sub">Pilih minggu RPT. Sistem padankan SK/SP DSKP secara automatik.</p>
-      <div class="grid2">
+      <div class="formsection"><h4>Kurikulum</h4><div class="grid2">
         <div><label>Tingkatan</label><select id="rT"><option value="">Pilih</option><option>4</option><option>5</option></select></div>
-        <div><label>Kelas</label><input id="rClass" placeholder="Contoh: 4A"></div>
         <div class="full"><label>Minggu / Tajuk RPT</label><select id="rRpt"><option value="">Pilih Tingkatan dahulu</option></select></div>
+      </div></div>
+      <div class="formsection"><h4>Maklumat PdP</h4><div class="grid2">
+        <div><label>Kelas</label><input id="rClass" placeholder="Contoh: 4A"></div>
         <div><label>Tarikh PdP</label><input id="rDate" type="date"></div>
-        <div><label>Tempoh (minit)</label><input id="rDuration" type="number" min="30" max="120" value="60"></div>
-        <div class="full"><label>Catatan Guru</label><textarea id="rNote" rows="3" placeholder="Pilihan: fokus KBAT, tahap kelas, kerja kumpulan..."></textarea></div>
-        <div class="full"><button class="btn" id="rBtn" onclick="generateRphUI()">Jana & Simpan RPH</button></div>
+        <div class="full"><label>Tempoh (minit)</label><input id="rDuration" type="number" min="30" max="120" value="60"></div>
+      </div></div>
+      <div class="formsection"><h4>Arahan Tambahan</h4>
+        <label>Catatan Guru</label><textarea id="rNote" rows="3" placeholder="Pilihan: fokus KBAT, tahap kelas, kerja kumpulan..."></textarea>
       </div>
+      <button class="btn" id="rBtn" onclick="generateRphUI()">Jana & Simpan RPH</button>
       <div id="rStatus" class="status"></div><div id="rResult"></div>
     </div>
   </section>
@@ -241,12 +363,12 @@ tbody tr{transition:background .15s ease}tbody tr:hover{background:#faf7fd}
   </section>
 </div>
 
-<nav class="bottom"><div class="inner">
-  <button class="navbtn" onclick="showPage('dashboard')"><b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-9"/><path d="M9.5 20v-6h5v6"/></svg></b>Utama</button>
-  <button class="navbtn" onclick="showPage('bank')"><b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16"/><path d="M4 12h10"/><path d="M4 18h7"/><path d="M16 16l2.5 2.5L22 14"/></svg></b>Soalan</button>
-  <button class="navbtn" onclick="showPage('guru-kuiz')"><b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3.5h6a1 1 0 0 1 1 1V6H8V4.5a1 1 0 0 1 1-1Z"/><path d="M9 12h6"/><path d="M9 16h4"/></svg></b>Kuiz</button>
-  <button class="navbtn" onclick="showPage('analisis')"><b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V10"/><path d="M12 21V4"/><path d="M19 21v-7"/><path d="M3 21h18"/></svg></b>Analisis</button>
-  <button class="navbtn" onclick="showPage('rph')"><b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6.5A2.5 2.5 0 0 1 4 17.5v-12Z"/><path d="M4 17.5A2.5 2.5 0 0 1 6.5 15H20"/><path d="M8 7h8"/></svg></b>RPH</button>
+<nav class="bottomnav"><div class="bottomnav-inner">
+  <button class="navbtn" data-page="dashboard" onclick="showPage('dashboard')"><span class="navdot"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-9"/><path d="M9.5 20v-6h5v6"/></svg>Utama</button>
+  <button class="navbtn" data-page="bank" onclick="showPage('bank')"><span class="navdot"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16"/><path d="M4 12h10"/><path d="M4 18h7"/><path d="M16 16l2.5 2.5L22 14"/></svg>Soalan</button>
+  <button class="navbtn" data-page="guru-kuiz" onclick="showPage('guru-kuiz')"><span class="navdot"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3.5h6a1 1 0 0 1 1 1V6H8V4.5a1 1 0 0 1 1-1Z"/><path d="M9 12h6"/><path d="M9 16h4"/></svg>Kuiz</button>
+  <button class="navbtn" data-page="analisis" onclick="showPage('analisis')"><span class="navdot"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V10"/><path d="M12 21V4"/><path d="M19 21v-7"/><path d="M3 21h18"/></svg>Analisis</button>
+  <button class="navbtn" data-page="rph" onclick="showPage('rph')"><span class="navdot"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6.5A2.5 2.5 0 0 1 4 17.5v-12Z"/><path d="M4 17.5A2.5 2.5 0 0 1 6.5 15H20"/><path d="M8 7h8"/></svg>RPH</button>
 </div></nav>
 
 <div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="sheet">
@@ -256,16 +378,34 @@ tbody tr{transition:background .15s ease}tbody tr:hover{background:#faf7fd}
 <script>
 const INITIAL_PAGE=<?!= JSON.stringify(initialPage || 'dashboard') ?>;
 const INITIAL_CODE=<?!= JSON.stringify(initialCode || '') ?>;
-let JDATA=null,QBANK=[],RPTDATA={},STUDENTQUIZ=null,BANKROWS=[],RPHROWS=[],STUROWS=[],CURRENT_BANK=null,CURRENT_RPH=null,bankTimer=null,manualTimer=null,rphTimer=null,studentTimer=null;
+let JDATA=null,QBANK=[],RPTDATA={},STUDENTQUIZ=null,BANKROWS=[],RPHROWS=[],STUROWS=[],CURRENT_BANK=null,CURRENT_RPH=null,CURRENT_PAGE='dashboard',bankTimer=null,manualTimer=null,rphTimer=null,studentTimer=null;
 
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 const attr=s=>esc(s).replace(/`/g,'&#096;');
 
+/* UI helpers: status badges, empty states, skeleton loaders — visual only, no data/logic impact */
+const STATUS_BADGE_MAP={'Lulus':'success','Aktif':'success','Belum Disemak':'warning','Tolak':'danger','Tamat':'danger','Disemak':'info','Draf':'info','Tidak Aktif':'info'};
+function statusBadge(status){const cls=STATUS_BADGE_MAP[status]||'info';return `<span class="badge badge-${cls}">${esc(status)}</span>`}
+const EMPTY_ICONS={
+ bank:'<path d="M4 6h16"/><path d="M4 12h10"/><path d="M4 18h7"/>',
+ quiz:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 12h6"/><path d="M9 16h4"/>',
+ rph:'<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6.5A2.5 2.5 0 0 1 4 17.5v-12Z"/><path d="M8 7h8"/>',
+ users:'<circle cx="9" cy="8" r="3"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/>',
+ chart:'<path d="M3 21h18"/><path d="M5 21v-6M10.5 21V9M16 21v-4"/>',
+ review:'<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12.5l2.5 2.5L16.5 9"/>'
+};
+function emptyState(icon,title,desc){
+ return `<div class="empty-state"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${EMPTY_ICONS[icon]||EMPTY_ICONS.review}</svg></div><b>${esc(title)}</b><span>${esc(desc)}</span></div>`;
+}
+function skeletonList(n){return Array.from({length:n||3}).map(()=>'<div class="skel-item"><div class="skel-line w40"></div><div class="skel-line w90"></div><div class="skel-line w60"></div></div>').join('')}
+
 function showPage(name){
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
   const p=$('page-'+name)||$('page-dashboard'); p.classList.add('active');
   window.scrollTo(0,0);
+  CURRENT_PAGE=name;
+  document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active', b.dataset.page===name));
   if(name==='dashboard')loadDashboard();
   if(name==='bank')loadBank();
   if(name==='guru-kuiz'){loadQuizManager();loadQuizBank()}
@@ -277,6 +417,9 @@ function showPage(name){
   if(name==='rph'&&!Object.keys(RPTDATA).length)loadRphOptions();
   history.replaceState(null,'',location.pathname+'?page='+encodeURIComponent(name));
 }
+function refreshCurrentPage(){showPage(CURRENT_PAGE)}
+function updatePortalStatus(){const el=$('portalStatus');if(!el)return;const ok=navigator.onLine;el.classList.toggle('is-offline',!ok);el.innerHTML='<i class="dot"></i>'+(ok?'Online':'Offline')}
+window.addEventListener('online',updatePortalStatus);window.addEventListener('offline',updatePortalStatus);updatePortalStatus();
 function fail(id,e){const el=$(id);if(el)el.textContent='Ralat: '+(e.message||e)}
 function openModal(html){$('modalBody').innerHTML=html;$('modal').classList.add('show')}
 function closeModal(){$('modal').classList.remove('show')}
@@ -287,8 +430,8 @@ function loadDashboard(){
   $('dSoalan').textContent=d.totalSoalan;$('dLulus').textContent=d.soalanLulus;$('dKuiz').textContent=d.kuizAktif;
   $('dRespons').textContent=d.jumlahRespons;$('dPurata').textContent=d.purataMarkah+'%';$('dRph').textContent=d.jumlahRPH;
   $('dSemak').textContent=d.menungguSemakan;$('dMurid').textContent=d.muridAktif;
-  $('dashRph').innerHTML=(d.recentRph||[]).map(x=>`<div class="item"><div class="itemtitle">${esc(x.tajuk||'-')}</div><div class="meta">${esc(x.tarikh)} · T${esc(x.tingkatan)} ${esc(x.kelas)} · ${esc(x.status)}</div></div>`).join('')||'<span class="sub">Belum ada RPH.</span>';
-  $('dashQuiz').innerHTML=(d.recentQuiz||[]).map(x=>`<div class="item"><div class="itemtitle">${esc(x.tajuk||'-')}</div><div class="meta">T${esc(x.tingkatan)} · Kod ${esc(x.kod)} · ${esc(x.status)}</div></div>`).join('')||'<span class="sub">Belum ada kuiz.</span>';
+  $('dashRph').innerHTML=(d.recentRph||[]).map(x=>`<div class="item"><div class="itemtitle">${esc(x.tajuk||'-')}</div><div class="meta">${esc(x.tarikh)} · T${esc(x.tingkatan)} ${esc(x.kelas)} · ${esc(x.status)}</div></div>`).join('')||emptyState('rph','Belum ada RPH','RPH terkini akan dipaparkan di sini.');
+  $('dashQuiz').innerHTML=(d.recentQuiz||[]).map(x=>`<div class="item"><div class="itemtitle">${esc(x.tajuk||'-')}</div><div class="meta">T${esc(x.tingkatan)} · Kod ${esc(x.kod)} · ${esc(x.status)}</div></div>`).join('')||emptyState('quiz','Belum ada kuiz','Kuiz terkini akan dipaparkan di sini.');
  }).withFailureHandler(e=>console.error(e)).getDashboardData();
 }
 
@@ -305,17 +448,17 @@ function refreshJTaj(){const rows=(JDATA&&JDATA.dskp[$('jT').value]||[]).filter(
 function janaSoalan(){
  const input={tingkatan:$('jT').value,bidang:$('jB').value,tajuk:$('jTaj').value,tahap:$('jTahap').value,jenis:$('jJenis').value,bilangan:Number($('jBil').value||5)};
  if(!input.tingkatan||!input.bidang||!input.tajuk)return alert('Lengkapkan Tingkatan, Bidang dan Tajuk.');
- $('jBtn').disabled=true;$('jStatus').textContent='Menjana soalan...';$('jResult').innerHTML='';
+ $('jBtn').disabled=true;$('jStatus').innerHTML='<span class="spinner"></span>Menjana soalan...';$('jResult').innerHTML='';
  google.script.run.withSuccessHandler(d=>{$('jBtn').disabled=false;$('jStatus').textContent=`Siap. ${d.simpan.saved} soalan disimpan sebagai Belum Disemak.`;$('jResult').innerHTML=d.hasil.soalan.map((q,i)=>`<div class="qbox"><b>${i+1}. ${esc(q.soalan)}</b><div class="meta">${q.pilihanA?`A. ${esc(q.pilihanA)}<br>B. ${esc(q.pilihanB)}<br>C. ${esc(q.pilihanC)}<br>D. ${esc(q.pilihanD)}<br>`:''}<strong>Jawapan:</strong> ${esc(q.jawapan)}<br>${esc(q.huraian)}</div></div>`).join('');}).withFailureHandler(e=>{$('jBtn').disabled=false;fail('jStatus',e)}).janaDanSimpanSoalan(input);
 }
 
 /* Bank Soalan */
 function loadBankDebounced(){clearTimeout(bankTimer);bankTimer=setTimeout(loadBank,300)}
 function loadBank(){
- $('bankStatus').textContent='Memuatkan...';
+ $('bankStatus').innerHTML='<span class="spinner"></span>Memuatkan...';$('bankList').innerHTML=skeletonList(4);
  google.script.run.withSuccessHandler(rows=>{
   BANKROWS=rows;$('bankStatus').textContent=rows.length+' rekod';
-  $('bankList').innerHTML=rows.map((x,i)=>`<div class="item"><div class="actions" style="justify-content:space-between"><div><span class="pill">T${x.tingkatan}</span><span class="pill">${esc(x.jenis)}</span><span class="pill">${esc(x.status)}</span></div><button class="btn small secondary" onclick="editBank(BANKROWS[${i}])">Semak / Edit</button></div><div class="itemtitle" style="margin-top:7px">${esc(x.soalan||'(Soalan kosong)')}</div><div class="meta">${esc(x.bidang)} · ${esc(x.tajuk)} · ${x.markahPenuh} markah</div></div>`).join('')||'<div class="sub">Tiada rekod.</div>';
+  $('bankList').innerHTML=rows.map((x,i)=>`<div class="item"><div class="review-meta"><span class="tag">T${x.tingkatan}</span><span class="tag">${esc(x.bidang)}</span><span class="tag">${esc(x.jenis)}</span><span class="tag">${esc(x.tahap)}</span>${statusBadge(x.status)}</div><div class="review-question">${esc(x.soalan||'(Soalan kosong)')}</div><div class="meta">${esc(x.tajuk)}</div><div class="review-foot"><span class="review-score">${x.markahPenuh} markah</span><button class="btn small secondary" onclick="editBank(BANKROWS[${i}])">Semak / Edit</button></div></div>`).join('')||emptyState('bank','Belum ada soalan','Jana soalan AI atau tambah soalan untuk mula membina bank soalan.');
  }).withFailureHandler(e=>fail('bankStatus',e)).getBankSemakanData({query:$('bQuery').value,status:$('bStatus').value,tingkatan:$('bT').value,jenis:$('bJenis').value});
 }
 function editBank(x){
@@ -344,33 +487,34 @@ function refreshQFields(){const t=Number($('qT').value),bs=[...new Set(QBANK.fil
 function refreshQTopics(){const t=Number($('qT').value),b=$('qB').value,ts=[...new Set(QBANK.filter(q=>q.tingkatan===t&&(!b||q.bidang===b)).map(q=>q.tajuk))];$('qTopic').innerHTML='<option value="">Semua</option>'+ts.map(x=>`<option>${esc(x)}</option>`).join('')}
 function createQuizUI(){
  const p={tajukKuiz:$('qTitle').value,tingkatan:$('qT').value,bidang:$('qB').value,tajuk:$('qTopic').value,tahap:$('qLevel').value,jenis:$('qType').value,bilangan:Number($('qCount').value||10)};
- $('qStatus').textContent='Membina kuiz...';
- google.script.run.withSuccessHandler(d=>{$('qStatus').textContent='Kuiz berjaya diaktifkan.';$('qCreated').innerHTML=`<div class="qbox"><b style="font-size:26px;letter-spacing:3px">${esc(d.kodKuiz)}</b><div class="meta">${d.bilangan} soalan · Kongsi kod ini kepada murid.</div><button class="btn small" style="margin-top:8px" onclick="openQuizCode('${attr(d.kodKuiz)}')">Buka Kuiz</button></div>`;loadQuizManager();loadDashboard()}).withFailureHandler(e=>fail('qStatus',e)).createQuiz(p);
+ $('qStatus').innerHTML='<span class="spinner"></span>Membina kuiz...';
+ google.script.run.withSuccessHandler(d=>{$('qStatus').textContent='Kuiz berjaya diaktifkan.';$('qCreated').innerHTML=`<div class="qbox"><b style="font-size:24px;letter-spacing:3px">${esc(d.kodKuiz)}</b><div class="meta">${d.bilangan} soalan · Kongsi kod ini kepada murid.</div><button class="btn small" style="margin-top:8px" onclick="openQuizCode('${attr(d.kodKuiz)}')">Buka Kuiz</button></div>`;loadQuizManager();loadDashboard()}).withFailureHandler(e=>fail('qStatus',e)).createQuiz(p);
 }
 function openQuizCode(code){$('mCode').value=code;showPage('kuiz');loadStudentQuiz()}
 function loadQuizManager(){
- google.script.run.withSuccessHandler(rows=>{$('quizManager').innerHTML=rows.map(x=>`<div class="item"><div class="actions" style="justify-content:space-between"><div><div class="itemtitle">${esc(x.tajuk)}</div><div class="meta">T${x.tingkatan} · ${esc(x.kod)} · ${x.bilangan} soalan</div></div><div class="actions"><span class="pill">${esc(x.status)}</span>${x.status==='Aktif'?`<button class="btn small danger" onclick="setQuizStatus('${attr(x.id)}','Tamat')">Tamatkan</button>`:`<button class="btn small secondary" onclick="setQuizStatus('${attr(x.id)}','Aktif')">Aktifkan</button>`}</div></div></div>`).join('')||'<div class="sub">Belum ada kuiz.</div>'}).withFailureHandler(e=>console.error(e)).getQuizManagerData();
+ $('quizManager').innerHTML=skeletonList(3);
+ google.script.run.withSuccessHandler(rows=>{$('quizManager').innerHTML=rows.map(x=>`<div class="item"><div class="actions" style="justify-content:space-between"><div><div class="itemtitle">${esc(x.tajuk)}</div><div class="meta">T${x.tingkatan} · ${esc(x.kod)} · ${x.bilangan} soalan</div></div><div class="actions">${statusBadge(x.status)}${x.status==='Aktif'?`<button class="btn small danger" onclick="setQuizStatus('${attr(x.id)}','Tamat')">Tamatkan</button>`:`<button class="btn small secondary" onclick="setQuizStatus('${attr(x.id)}','Aktif')">Aktifkan</button>`}</div></div></div>`).join('')||emptyState('quiz','Belum ada kuiz','Bina kuiz pertama untuk mula merekod prestasi murid.')}).withFailureHandler(e=>console.error(e)).getQuizManagerData();
 }
 function setQuizStatus(id,status){google.script.run.withSuccessHandler(()=>{loadQuizManager();loadDashboard()}).withFailureHandler(e=>alert(e.message||e)).updateQuizStatus(id,status)}
 
 /* Kuiz murid */
 function loadStudentQuiz(){
- const code=$('mCode').value.trim();$('mMsg').textContent='Memuatkan...';
+ const code=$('mCode').value.trim();$('mMsg').innerHTML='<span class="spinner"></span>Memuatkan...';
  google.script.run.withSuccessHandler(d=>{STUDENTQUIZ=d;$('mMsg').textContent=d.tajukKuiz+' · '+d.bilangan+' soalan';$('mIdentity').style.display='block';$('mSubmit').style.display='block';$('mQuiz').innerHTML=d.soalan.map(q=>{const inp=q.jenis.toLowerCase()==='objektif'?q.pilihan.map((p,i)=>`<label class="opt"><input type="radio" name="mq_${attr(q.id)}" value="${attr(p)}">${String.fromCharCode(65+i)}. ${esc(p)}</label>`).join(''):`<textarea id="mq_${attr(q.id)}" rows="5" placeholder="Taip jawapan..."></textarea>`;return `<div class="card"><div class="itemtitle">${q.no}. ${esc(q.soalan)}</div><div class="meta">${esc(q.jenis)}</div>${inp}</div>`}).join('')}).withFailureHandler(e=>fail('mMsg',e)).loadQuizByCode(code);
 }
 function submitStudentQuiz(){
  if(!STUDENTQUIZ)return;
  const answers={};STUDENTQUIZ.soalan.forEach(q=>{if(q.jenis.toLowerCase()==='objektif'){const e=document.querySelector(`input[name="mq_${CSS.escape(q.id)}"]:checked`);answers[q.id]=e?e.value:''}else{const e=$('mq_'+q.id);answers[q.id]=e?e.value:''}});
  const p={kodKuiz:STUDENTQUIZ.kodKuiz,nama:$('mName').value,idMurid:$('mId').value,kelas:$('mClass').value,answers};
- $('mResult').textContent='Menghantar...';
+ $('mResult').innerHTML='<span class="spinner"></span>Menghantar...';
  google.script.run.withSuccessHandler(d=>{$('mResult').textContent=`Jawapan dihantar.${d.autoMax?` Markah objektif: ${d.autoScore}/${d.autoMax}.`:''}${d.perluSemakan?` ${d.perluSemakan} jawapan menunggu semakan guru.`:''}`;loadDashboard()}).withFailureHandler(e=>fail('mResult',e)).submitQuiz(p);
 }
 
 /* Semak Jawapan */
 function loadManualDebounced(){clearTimeout(manualTimer);manualTimer=setTimeout(loadManualReviews,300)}
 function loadManualReviews(){
- $('sjStatus').textContent='Memuatkan...';
- google.script.run.withSuccessHandler(rows=>{$('sjStatus').textContent=rows.length+' jawapan menunggu semakan';$('sjList').innerHTML=rows.map(x=>`<div class="item"><div class="itemtitle">${esc(x.nama)} · ${esc(x.kelas)}</div><div class="meta">${esc(x.tajukKuiz)} · Soalan ${x.noSoalan} · ${esc(x.jenis)}</div><div class="qbox"><b>${esc(x.soalan)}</b><div class="meta"><strong>Jawapan murid:</strong><br>${esc(x.jawapanMurid)}<br><br><strong>Skema:</strong><br>${esc(x.skema)}</div></div><div class="grid2" style="margin-top:8px"><div><label>Markah / ${x.markahPenuh}</label><input id="mk_${x.sheetRow}" type="number" min="0" max="${x.markahPenuh}" step="0.5"></div><div><label>Catatan</label><input id="ct_${x.sheetRow}" placeholder="Pilihan"></div></div><button class="btn small" style="margin-top:8px" onclick="saveManual(${x.sheetRow})">Simpan Markah</button></div>`).join('')||'<div class="sub">Tiada jawapan menunggu semakan.</div>'}).withFailureHandler(e=>fail('sjStatus',e)).getManualReviewData({query:$('sjQuery').value});
+ $('sjStatus').innerHTML='<span class="spinner"></span>Memuatkan...';$('sjList').innerHTML=skeletonList(3);
+ google.script.run.withSuccessHandler(rows=>{$('sjStatus').textContent=rows.length+' jawapan menunggu semakan';$('sjList').innerHTML=rows.map(x=>`<div class="item"><div class="itemtitle">${esc(x.nama)} · ${esc(x.kelas)}</div><div class="meta">${esc(x.tajukKuiz)} · Soalan ${x.noSoalan} · ${esc(x.jenis)}</div><div class="qbox"><b>${esc(x.soalan)}</b><div class="meta"><strong>Jawapan murid:</strong><br>${esc(x.jawapanMurid)}<br><br><strong>Skema:</strong><br>${esc(x.skema)}</div></div><div class="grid2" style="margin-top:8px"><div><label>Markah / ${x.markahPenuh}</label><input id="mk_${x.sheetRow}" type="number" min="0" max="${x.markahPenuh}" step="0.5"></div><div><label>Catatan</label><input id="ct_${x.sheetRow}" placeholder="Pilihan"></div></div><button class="btn small" style="margin-top:8px" onclick="saveManual(${x.sheetRow})">Simpan Markah</button></div>`).join('')||emptyState('review','Tiada jawapan menunggu semakan','Semua jawapan struktur dan esei telah ditanda.')}).withFailureHandler(e=>fail('sjStatus',e)).getManualReviewData({query:$('sjQuery').value});
 }
 function saveManual(row){google.script.run.withSuccessHandler(()=>{loadManualReviews();loadDashboard()}).withFailureHandler(e=>alert(e.message||e)).saveManualMark({sheetRow:row,markah:Number($('mk_'+row).value),catatan:$('ct_'+row).value})}
 
@@ -378,9 +522,9 @@ function saveManual(row){google.script.run.withSuccessHandler(()=>{loadManualRev
 function loadAnalisis(){
  google.script.run.withSuccessHandler(d=>{
   $('aResp').textContent=d.jumlahRespons;$('aAvg').textContent=d.purataKeseluruhan+'%';$('aPending').textContent=d.menungguSemakan;$('aInter').textContent=d.bilIntervensi;
-  $('aQuiz').innerHTML=`<table><thead><tr><th>Kuiz</th><th>Ting.</th><th>Respons</th><th>Purata</th><th>Belum Semak</th></tr></thead><tbody>${d.byQuiz.map(x=>`<tr><td>${esc(x.tajuk)}</td><td>${x.tingkatan}</td><td>${x.respons}</td><td>${x.purata}%</td><td>${x.pending}</td></tr>`).join('')}</tbody></table>`;
-  $('aTopic').innerHTML=d.weakTopics.map(x=>`<div class="item"><div class="itemtitle">${esc(x.tajuk)}</div><div class="meta">${esc(x.bidang)} · ${x.percent}%</div><div class="bar"><i style="width:${x.percent}%"></i></div></div>`).join('')||'<div class="sub">Belum cukup data.</div>';
-  $('aStudents').innerHTML=`<div class="meta" style="margin-bottom:7px">Ambang intervensi: bawah ${d.threshold}%</div>`+d.intervention.map(x=>`<div class="item"><div class="itemtitle">${esc(x.nama)}</div><div class="meta">${esc(x.kelas)} · ${x.purata}% · ${x.bilKuiz} kuiz</div></div>`).join('')||'<div class="sub">Tiada murid di bawah ambang.</div>';
+  $('aQuiz').innerHTML=d.byQuiz.map(x=>`<div class="item"><div class="itemtitle">${esc(x.tajuk)} <span class="tag" style="margin-left:6px">T${x.tingkatan}</span></div><div class="bar"><i style="width:${x.purata}%"></i></div><div class="meta">${x.purata}% purata · ${x.respons} respons · ${x.pending} belum semak</div></div>`).join('')||emptyState('chart','Belum ada respons kuiz','Data prestasi akan terpapar selepas murid menjawab kuiz.');
+  $('aTopic').innerHTML=d.weakTopics.map(x=>`<div class="item"><div class="itemtitle">${esc(x.tajuk)}</div><div class="meta">${esc(x.bidang)} · ${x.percent}% · Perlu pengukuhan</div><div class="bar"><i style="width:${x.percent}%"></i></div></div>`).join('')||emptyState('chart','Belum cukup data','Data topik lemah akan terpapar apabila murid mula menjawab kuiz.');
+  $('aStudents').innerHTML=(d.intervention.length?`<div class="meta" style="margin-bottom:8px">Ambang intervensi: bawah ${d.threshold}%</div>`:'')+(d.intervention.map(x=>`<div class="item"><div class="itemtitle">${esc(x.nama)}</div><div class="meta">${esc(x.kelas)} · ${x.purata}% purata · ${x.bilKuiz} kuiz</div></div>`).join('')||emptyState('users','Tiada murid di bawah ambang','Semua murid mencapai tahap purata yang baik.'));
  }).withFailureHandler(e=>console.error(e)).getAnalisisData();
 }
 
@@ -390,14 +534,23 @@ $('rT').addEventListener('change',()=>{const rows=RPTDATA[$('rT').value]||[];$('
 function generateRphUI(){
  const p={tingkatan:$('rT').value,rptId:$('rRpt').value,kelas:$('rClass').value,tarikh:$('rDate').value,tempoh:Number($('rDuration').value||60),catatanGuru:$('rNote').value};
  if(!p.tingkatan||!p.rptId||!p.kelas||!p.tarikh)return alert('Lengkapkan Tingkatan, Minggu RPT, Kelas dan Tarikh.');
- $('rBtn').disabled=true;$('rStatus').textContent='Menjana RPH...';$('rResult').innerHTML='';
- google.script.run.withSuccessHandler(d=>{$('rBtn').disabled=false;$('rStatus').textContent='Siap dan disimpan sebagai Draf · '+d.simpan.id;const m=d.hasil.meta,r=d.hasil.rph;$('rResult').innerHTML=`<div class="qbox"><b>${esc(m.tajuk)}</b><div class="meta"><strong>SK:</strong> ${esc(m.sk||'Tiada padanan khusus')}<br><strong>SP:</strong> ${esc(m.sp||'-')}<br><br><strong>Objektif:</strong> ${esc(r.objektif)}<br><br><strong>Kriteria:</strong> ${esc(r.kriteriaKejayaan)}<br><br><strong>Aktiviti:</strong> ${esc(r.aktivitiPdP)}<br><br><strong>BBM:</strong> ${esc(r.bbm)}<br><strong>Pentaksiran:</strong> ${esc(r.pentaksiran)}<br><strong>Refleksi:</strong> ${esc(r.refleksi)}</div></div>`;loadDashboard()}).withFailureHandler(e=>{$('rBtn').disabled=false;fail('rStatus',e)}).janaDanSimpanRPH(p);
+ $('rBtn').disabled=true;$('rStatus').innerHTML='<span class="spinner"></span>Menjana RPH...';$('rResult').innerHTML='';
+ google.script.run.withSuccessHandler(d=>{$('rBtn').disabled=false;$('rStatus').textContent='Siap dan disimpan sebagai Draf · '+d.simpan.id;const m=d.hasil.meta,r=d.hasil.rph;$('rResult').innerHTML=`<div class="ai-title">${esc(m.tajuk)}</div>
+ <div class="ai-section"><h4>Standard Kandungan</h4><p>${esc(m.sk||'Tiada padanan khusus')}</p></div>
+ <div class="ai-section"><h4>Standard Pembelajaran</h4><p>${esc(m.sp||'-')}</p></div>
+ <div class="ai-section"><h4>Objektif Pembelajaran</h4><p>${esc(r.objektif)}</p></div>
+ <div class="ai-section"><h4>Kriteria Kejayaan</h4><p>${esc(r.kriteriaKejayaan)}</p></div>
+ <div class="ai-section"><h4>Aktiviti PdP</h4><p>${esc(r.aktivitiPdP)}</p></div>
+ <div class="ai-section"><h4>BBM</h4><p>${esc(r.bbm)}</p></div>
+ <div class="ai-section"><h4>Pentaksiran</h4><p>${esc(r.pentaksiran)}</p></div>
+ <div class="ai-section"><h4>Refleksi</h4><p>${esc(r.refleksi)}</p></div>`;loadDashboard()}).withFailureHandler(e=>{$('rBtn').disabled=false;fail('rStatus',e)}).janaDanSimpanRPH(p);
 }
 
 /* Rekod RPH */
 function loadRphDebounced(){clearTimeout(rphTimer);rphTimer=setTimeout(loadRphRecords,300)}
 function loadRphRecords(){
- google.script.run.withSuccessHandler(rows=>{RPHROWS=rows;$('rrList').innerHTML=rows.map((x,i)=>`<div class="item"><div class="actions" style="justify-content:space-between"><div><div class="itemtitle">${esc(x.tajuk)}</div><div class="meta">${esc(x.tarikh)} · T${x.tingkatan} ${esc(x.kelas)} · ${esc(x.bidang)}</div></div><div><span class="pill">${esc(x.status)}</span><button class="btn small secondary" onclick="editRph(RPHROWS[${i}])">Buka</button></div></div></div>`).join('')||'<div class="sub">Tiada RPH.</div>'}).withFailureHandler(e=>console.error(e)).getRPHRecords({query:$('rrQuery').value,status:$('rrStatus').value});
+ $('rrList').innerHTML=skeletonList(3);
+ google.script.run.withSuccessHandler(rows=>{RPHROWS=rows;$('rrList').innerHTML=rows.map((x,i)=>`<div class="item"><div class="actions" style="justify-content:space-between"><div><div class="itemtitle">${esc(x.tajuk)}</div><div class="meta">${esc(x.tarikh)} · T${x.tingkatan} ${esc(x.kelas)} · ${esc(x.bidang)}</div></div><div class="actions">${statusBadge(x.status)}<button class="btn small secondary" onclick="editRph(RPHROWS[${i}])">Buka</button></div></div></div>`).join('')||emptyState('rph','Belum ada RPH','Jana RPH pertama anda untuk mula membina rekod pengajaran.')}).withFailureHandler(e=>console.error(e)).getRPHRecords({query:$('rrQuery').value,status:$('rrStatus').value});
 }
 function editRph(x){
  CURRENT_RPH=x;
@@ -412,7 +565,9 @@ function saveRphEdit(){const id=CURRENT_RPH.id;const p={id,objetif:$('erObj').va
 
 /* Murid */
 function loadStudentsDebounced(){clearTimeout(studentTimer);studentTimer=setTimeout(loadStudents,300)}
-function loadStudents(){google.script.run.withSuccessHandler(rows=>{STUROWS=rows;$('stuList').innerHTML=rows.map((x,i)=>`<div class="item"><div class="actions" style="justify-content:space-between"><div><div class="itemtitle">${esc(x.nama)}</div><div class="meta">${esc(x.id)} · T${x.tingkatan} ${esc(x.kelas)} · ${esc(x.status)}</div></div><button class="btn small secondary" onclick="openStudentEditor(STUROWS[${i}])">Edit</button></div></div>`).join('')||'<div class="sub">Tiada murid.</div>'}).withFailureHandler(e=>console.error(e)).getMuridData({query:$('stuSearch').value,tingkatan:$('stuTFilter').value})}
+function loadStudents(){
+ $('stuList').innerHTML=skeletonList(3);
+ google.script.run.withSuccessHandler(rows=>{STUROWS=rows;$('stuList').innerHTML=rows.map((x,i)=>`<div class="item"><div class="actions" style="justify-content:space-between"><div><div class="itemtitle">${esc(x.nama)}</div><div class="meta">${esc(x.id)} · T${x.tingkatan} ${esc(x.kelas)}</div></div><div class="actions">${statusBadge(x.status)}<button class="btn small secondary" onclick="openStudentEditor(STUROWS[${i}])">Edit</button></div></div></div>`).join('')||emptyState('users','Belum ada murid','Tambah murid untuk mula mengurus rekod prestasi.')}).withFailureHandler(e=>console.error(e)).getMuridData({query:$('stuSearch').value,tingkatan:$('stuTFilter').value})}
 function openStudentEditor(x){
  x=x||{id:'',nama:'',tingkatan:4,kelas:'',kontak:'',status:'Aktif'};
  openModal(`<h2>${x.id?'Edit Murid':'Tambah Murid'}</h2><input type="hidden" id="esId" value="${attr(x.id)}"><label>Nama</label><input id="esName" value="${attr(x.nama)}"><div class="grid2"><div><label>Tingkatan</label><select id="esT"><option>4</option><option>5</option></select></div><div><label>Kelas</label><input id="esClass" value="${attr(x.kelas)}"></div></div><label>Telefon / Emel</label><input id="esContact" value="${attr(x.kontak)}"><label>Status</label><select id="esStatus"><option>Aktif</option><option>Tidak Aktif</option></select><button class="btn" style="margin-top:10px" onclick="saveStudent()">Simpan</button>`);
