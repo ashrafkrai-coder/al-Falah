@@ -1,0 +1,27 @@
+myPI SPM PWA — TEST REPORT
+
+PASS — manifest name
+PASS — manifest start_url
+PASS — manifest display standalone
+PASS — manifest lang
+PASS — manifest icons 192 & 512 ({'512x512', '192x192'})
+PASS — icon 192 exists
+PASS — icon 192 dimensions ((192, 192))
+PASS — icon 512 exists
+PASS — icon 512 dimensions ((512, 512))
+PASS — service worker install
+PASS — service worker activate
+PASS — service worker fetch
+PASS — offline fallback
+PASS — Apps Script network-only
+PASS — manifest linked
+PASS — service worker registered
+PASS — Apple touch icon
+PASS — Apps Script URL persistence
+PASS — Apps Script URL validation
+PASS — portal shell iframe
+PASS — vercel config valid
+PASS — final Code.gs included
+PASS — final Apps Script portal included
+
+RESULT: 23/23 checks passed.

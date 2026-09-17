@@ -1,0 +1,61 @@
+{
+  "name": "myPI SPM — Portal Pendidikan Islam",
+  "short_name": "myPI SPM",
+  "description": "Portal Pendidikan Islam Tingkatan 4 & 5: soalan AI, kuiz, analisis, RPH dan rekod murid.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f6f8",
+  "theme_color": "#111827",
+  "orientation": "portrait-primary",
+  "lang": "ms-MY",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "url": "./?page=dashboard",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Kuiz Murid",
+      "short_name": "Kuiz",
+      "url": "./?page=kuiz",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Jana RPH",
+      "short_name": "RPH",
+      "url": "./?page=rph",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}
