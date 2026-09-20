@@ -1,14 +1,51 @@
-const CACHE='mypi-spm-v1';
-const APP_SHELL=['./','./index.html','./manifest.json','./offline.html','./icons/icon-192.png','./icons/icon-512.png'];
-self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(c=>c.addAll(APP_SHELL)));self.skipWaiting()});
-self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim()});
+const CACHE='mypi-kssm-shell-v3';
+const APP_SHELL=[
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/offline.html',
+  '/icons/icon-192.png',
+  '/icons/icon-512.png',
+  '/icons/icon-maskable-192.png',
+  '/icons/icon-maskable-512.png',
+  '/icons/apple-touch-icon-180.png',
+  '/icons/favicon-32.png'
+];
+
+self.addEventListener('install',event=>{
+  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(APP_SHELL)));
+  self.skipWaiting();
+});
+
+self.addEventListener('activate',event=>{
+  event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))));
+  self.clients.claim();
+});
+
 self.addEventListener('fetch',event=>{
- const req=event.request,url=new URL(req.url);
- if(url.hostname.includes('script.google.com')||url.hostname.includes('googleusercontent.com')||url.hostname.includes('googleapis.com')){
-   event.respondWith(fetch(req).catch(()=>caches.match('./offline.html')));return;
- }
- if(req.mode==='navigate'){
-   event.respondWith(fetch(req).then(res=>{const copy=res.clone();caches.open(CACHE).then(c=>c.put(req,copy));return res}).catch(()=>caches.match(req).then(r=>r||caches.match('./index.html'))));return;
- }
- event.respondWith(caches.match(req).then(cached=>cached||fetch(req).then(res=>{if(req.method==='GET'&&res.ok){const copy=res.clone();caches.open(CACHE).then(c=>c.put(req,copy))}return res})));
+  const request=event.request;
+  if(request.method!=='GET') return;
+  const url=new URL(request.url);
+  if(url.origin!==self.location.origin) return;
+
+  if(request.mode==='navigate'){
+    event.respondWith(
+      fetch(request).then(response=>{
+        const copy=response.clone();
+        caches.open(CACHE).then(cache=>cache.put(request,copy));
+        return response;
+      }).catch(()=>caches.match(request).then(cached=>cached||caches.match('/index.html')))
+    );
+    return;
+  }
+
+  event.respondWith(
+    caches.match(request).then(cached=>cached||fetch(request).then(response=>{
+      if(response.ok){
+        const copy=response.clone();
+        caches.open(CACHE).then(cache=>cache.put(request,copy));
+      }
+      return response;
+    }))
+  );
 });

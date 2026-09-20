@@ -4,15 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#4c1d95">
-<meta name="description" content="myPI SPM — Portal Pendidikan Islam Tingkatan 4 & 5">
+<meta name="description" content="myPI KSSM — Portal Pendidikan Islam Tingkatan 1 hingga 5">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="myPI SPM">
-<link rel="manifest" href="./manifest.json">
-<link rel="icon" href="./icons/icon-192.png">
-<link rel="apple-touch-icon" href="./icons/icon-192.png">
-<title>myPI SPM</title>
+<meta name="apple-mobile-web-app-title" content="myPI KSSM">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon-180.png">
+<title>myPI KSSM</title>
 <style>
 :root{--bg:#efe4fa;--dark:#4c1d95;--dark2:#6d28d9;--accent:#7c3aed;--accent2:#e879f9;--line:#c9a4e8;--text:#1c1730;--muted:#6f6a85;
  --sh-sm:0 2px 8px rgba(76,29,149,.08);--sh-md:0 12px 32px rgba(76,29,149,.16)}
@@ -23,7 +23,8 @@ body{overflow:hidden;background:radial-gradient(1000px 480px at 100% -10%,rgba(1
 header{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:linear-gradient(135deg,var(--dark),var(--dark2));color:#fff;flex:0 0 auto;box-shadow:var(--sh-sm)}
 .brand{font-weight:800;font-size:16px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
 .brand::before{content:'📖';font-size:17px}
-.status{font-size:11px;opacity:.85;font-weight:600;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.12)}
+.head-actions{display:flex;align-items:center;gap:7px}.status{font-size:11px;opacity:.85;font-weight:600;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.12)}
+.install-btn{display:none;width:auto;padding:6px 9px;margin:0;border:1px solid rgba(255,255,255,.44);border-radius:999px;background:rgba(255,255,255,.16);box-shadow:none;font-size:11px;line-height:1;font-weight:750}.install-btn:hover{background:rgba(255,255,255,.26);box-shadow:none;transform:none}.install-btn:active{transform:none}
 main{position:relative;flex:1;min-height:0}iframe{width:100%;height:100%;border:0;background:var(--bg)}
 .setup,.offline{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:20px}
 .card{max-width:520px;width:100%;background:rgba(247,239,252,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:2px solid var(--line);border-radius:22px;padding:24px;box-shadow:var(--sh-md);animation:pop .3s cubic-bezier(.2,.8,.2,1)}
@@ -42,12 +43,12 @@ button.secondary:hover{border-color:var(--accent);color:var(--accent);filter:non
 </head>
 <body>
 <div class="app">
-<header><div class="brand">myPI SPM</div><div class="status" id="netStatus">Semak sambungan…</div></header>
+<header><div class="brand">myPI KSSM</div><div class="head-actions"><button id="installButton" class="install-btn" type="button">Pasang App</button><div class="status" id="netStatus">Semak sambungan…</div></div></header>
 <main>
-<iframe id="portalFrame" title="myPI SPM Portal"></iframe>
+<iframe id="portalFrame" title="myPI KSSM Portal"></iframe>
 <div id="setup" class="setup"><div class="card">
 <span class="badge">Tetapan pertama kali</span>
-<h1>Sambungkan Web App myPI SPM</h1>
+<h1>Sambungkan Web App myPI KSSM</h1>
 <p>Masukkan URL deployment Google Apps Script yang berakhir dengan <b>/exec</b>. URL disimpan pada peranti ini sahaja.</p>
 <input id="scriptUrl" placeholder="https://script.google.com/macros/s/.../exec">
 <button onclick="saveUrl()">Simpan & Buka Portal</button>
@@ -67,7 +68,9 @@ const frame=document.getElementById('portalFrame');
 const setup=document.getElementById('setup');
 const offline=document.getElementById('offline');
 const statusEl=document.getElementById('netStatus');
+const installButton=document.getElementById('installButton');
 const KEY='mypi_apps_script_url';
+let installPrompt=null;
 function normalizeUrl(u){
  u=(u||'').trim();
  if(!u)return '';
@@ -97,9 +100,19 @@ function updateNetwork(){
  const ok=navigator.onLine;statusEl.textContent=ok?'Online':'Offline';
  if(!ok){frame.style.display='none';setup.style.display='none';offline.style.display='flex'}else offline.style.display='none';
 }
+window.addEventListener('beforeinstallprompt',event=>{
+ event.preventDefault();installPrompt=event;installButton.style.display='block';
+});
+installButton.addEventListener('click',async()=>{
+ if(!installPrompt)return;
+ installPrompt.prompt();
+ await installPrompt.userChoice;
+ installPrompt=null;installButton.style.display='none';
+});
+window.addEventListener('appinstalled',()=>{installPrompt=null;installButton.style.display='none'});
 window.addEventListener('online',()=>{updateNetwork();loadPortal()});
 window.addEventListener('offline',updateNetwork);
-if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(console.error))}
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(console.error))}
 loadPortal();
 </script>
 </body></html>

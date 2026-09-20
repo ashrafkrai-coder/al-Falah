@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111827">
-<title>myPI SPM</title>
+<title>myPI KSSM</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -186,7 +186,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
   <div class="topbar-inner">
     <div class="brand">
       <div class="brand-mark">📖</div>
-      <div class="brand-text"><strong>myPI SPM</strong><span>Portal Pendidikan Islam</span></div>
+      <div class="brand-text"><strong>myPI KSSM</strong><span>Portal Pendidikan Islam</span></div>
     </div>
     <div class="topbar-actions">
       <span class="status-pill" id="portalStatus"><i class="dot"></i>Online</span>
@@ -205,7 +205,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
   <!-- DASHBOARD -->
   <section id="page-dashboard" class="page active">
     <h1 class="page-title">Assalamualaikum, Guru</h1>
-    <p class="page-sub">Ringkasan myPI SPM hari ini</p>
+    <p class="page-sub">Ringkasan Pendidikan Islam KSSM hari ini</p>
+    <div class="card"><div class="grid2">
+      <div><label>Tingkatan</label><select id="dT"><option value="">Semua Tingkatan</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+      <div><label>Kelas</label><input id="dClass" placeholder="Contoh: 1A atau 4A"></div>
+      <div class="actions full"><button class="btn small" onclick="loadDashboard()">Tapis Dashboard</button><button class="btn small secondary" onclick="window.print()">Cetak / Simpan PDF</button></div>
+    </div></div>
     <div class="kpi-grid">
       <div class="kpi"><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16"/><path d="M4 12h10"/><path d="M4 18h7"/></svg></div><strong id="dSoalan">–</strong><span>Jumlah Soalan</span></div>
       <div class="kpi"><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg></div><strong id="dLulus">–</strong><span>Soalan Lulus</span></div>
@@ -226,6 +231,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
       <button class="module-row" onclick="showPage('rph')"><span class="module-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5h7l4 4V20a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z"/><path d="M14 3.5V8h4.5"/><path d="M12 12v5M9.5 14.5h5"/></svg></span><span class="module-text"><b>Jana RPH</b><span>RPT + DSKP + AI</span></span><span class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></button>
       <button class="module-row" onclick="showPage('rekod-rph')"><span class="module-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="4" rx="1"/><path d="M4.5 8.5V18a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1V8.5"/><path d="M10 13h4"/></svg></span><span class="module-text"><b>Rekod RPH</b><span>Semak, kemas kini & cetak</span></span><span class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></button>
       <button class="module-row" onclick="showPage('murid')"><span class="module-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><circle cx="17" cy="8.5" r="2.3"/><path d="M15.5 14.3c2.3.3 4 2 4 4.7"/></svg></span><span class="module-text"><b>Pengurusan Murid</b><span>Tambah & kemas kini rekod murid</span></span><span class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></button>
+      <button class="module-row" onclick="showPage('data')"><span class="module-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/><path d="m15 4 3-3 3 3M18 1v8"/></svg></span><span class="module-text"><b>Data & Sandaran</b><span>Import DSKP/RPT, eksport dan backup</span></span><span class="module-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span></button>
     </div></div>
     <div class="grid2">
       <div class="card"><h3>RPH Terkini</h3><div id="dashRph" class="list"><div class="skel-item"><div class="skel-line w40"></div><div class="skel-line w90"></div></div><div class="skel-item"><div class="skel-line w40"></div><div class="skel-line w60"></div></div></div></div>
@@ -237,7 +243,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
   <section id="page-jana" class="page">
     <div class="card"><h2>Jana Soalan AI</h2><p class="sub">Soalan dijana berdasarkan SK/SP DSKP yang telah disemak.</p>
       <div class="formsection"><h4>Kandungan DSKP</h4><div class="grid2">
-        <div><label>Tingkatan</label><select id="jT"><option value="">Pilih</option><option>4</option><option>5</option></select></div>
+        <div><label>Tingkatan</label><select id="jT"><option value="">Pilih</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
         <div><label>Bidang</label><select id="jB"><option value="">Pilih Tingkatan dahulu</option></select></div>
         <div class="full"><label>Tajuk</label><select id="jTaj"><option value="">Pilih Bidang dahulu</option></select></div>
       </div></div>
@@ -257,7 +263,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
       <div class="grid2">
         <input id="bQuery" placeholder="Cari tajuk / soalan..." oninput="loadBankDebounced()">
         <select id="bStatus" onchange="loadBank()"><option value="">Semua Status</option><option>Belum Disemak</option><option>Disemak</option><option>Lulus</option><option>Tolak</option></select>
-        <select id="bT" onchange="loadBank()"><option value="">Semua Tingkatan</option><option>4</option><option>5</option></select>
+        <select id="bT" onchange="loadBank()"><option value="">Semua Tingkatan</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
         <select id="bJenis" onchange="loadBank()"><option value="">Semua Jenis</option><option>Objektif</option><option>Struktur</option><option>Esei</option></select>
       </div>
       <div id="bankStatus" class="status"></div><div id="bankList" class="list"></div>
@@ -269,7 +275,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
     <div class="card"><h2>Bina Kuiz</h2><p class="sub">Sistem menggunakan soalan Bank_Soalan berstatus Lulus.</p>
       <div class="grid2">
         <div class="full"><label>Tajuk Kuiz</label><input id="qTitle" placeholder="Contoh: Ulang Kaji Akidah T4"></div>
-        <div><label>Tingkatan</label><select id="qT"><option value="">Pilih</option><option>4</option><option>5</option></select></div>
+        <div><label>Tingkatan</label><select id="qT"><option value="">Pilih</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
         <div><label>Bidang</label><select id="qB"><option value="">Semua</option></select></div>
         <div class="full"><label>Tajuk</label><select id="qTopic"><option value="">Semua</option></select></div>
         <div><label>Tahap</label><select id="qLevel"><option value="">Campuran</option><option>Mudah</option><option>Sederhana</option><option>Tinggi</option></select></div>
@@ -306,6 +312,11 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
 
   <!-- ANALISIS -->
   <section id="page-analisis" class="page">
+    <div class="card"><div class="grid2">
+      <div><label>Tingkatan</label><select id="aT"><option value="">Semua Tingkatan</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+      <div><label>Kelas</label><input id="aClass" placeholder="Contoh: 2A atau 5A"></div>
+      <div class="full"><button class="btn small" onclick="loadAnalisis()">Tapis Analisis</button></div>
+    </div></div>
     <div class="kpi-grid">
       <div class="kpi"><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h4l2 3h4l2-3h4"/><path d="M4 12 5.5 5h13L20 12"/><path d="M4 12v6a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></div><strong id="aResp">–</strong><span>Respons</span></div>
       <div class="kpi"><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V8"/><path d="M12 16V4"/><path d="M18 16v-6"/><path d="M3 20h18"/></svg></div><strong id="aAvg">–</strong><span>Purata</span></div>
@@ -323,7 +334,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
   <section id="page-rph" class="page">
     <div class="card"><h2>Jana RPH</h2><p class="sub">Pilih minggu RPT. Sistem padankan SK/SP DSKP secara automatik.</p>
       <div class="formsection"><h4>Kurikulum</h4><div class="grid2">
-        <div><label>Tingkatan</label><select id="rT"><option value="">Pilih</option><option>4</option><option>5</option></select></div>
+        <div><label>Tingkatan</label><select id="rT"><option value="">Pilih</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
         <div class="full"><label>Minggu / Tajuk RPT</label><select id="rRpt"><option value="">Pilih Tingkatan dahulu</option></select></div>
       </div></div>
       <div class="formsection"><h4>Maklumat PdP</h4><div class="grid2">
@@ -355,11 +366,44 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
     <div class="card"><h2>Pengurusan Murid</h2>
       <div class="grid2">
         <input id="stuSearch" placeholder="Cari murid / kelas..." oninput="loadStudentsDebounced()">
-        <select id="stuTFilter" onchange="loadStudents()"><option value="">Semua Tingkatan</option><option>4</option><option>5</option></select>
+        <select id="stuTFilter" onchange="loadStudents()"><option value="">Semua Tingkatan</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
       </div>
       <button class="btn" style="margin-top:10px" onclick="openStudentEditor()">+ Tambah Murid</button>
       <div id="stuList" class="list" style="margin-top:10px"></div>
     </div>
+  </section>
+
+  <!-- DATA, IMPORT, EKSPORT & SANDARAN -->
+  <section id="page-data" class="page">
+    <div class="card"><h2>Import DSKP / RPT</h2><p class="sub">Import Excel/CSV atau salin data daripada Google Sheet. DSKP memerlukan header Bidang, Tajuk, Standard Kandungan dan Standard Pembelajaran; RPT memerlukan Minggu, Bidang dan Tajuk.</p>
+      <div class="formsection"><h4>Import Fail Excel / CSV</h4><div class="grid2">
+        <div><label>Jenis</label><select id="imJenis"><option>DSKP</option><option>RPT</option></select></div>
+        <div><label>Tingkatan</label><select id="imT"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+        <div><label>Mod</label><select id="imMode"><option>Tambah</option><option>Ganti</option></select></div>
+        <div><label>Fail</label><input id="imFile" type="file" accept=".xlsx,.xls,.csv"></div>
+      </div><button class="btn small" onclick="importKurikulumFile()">Import Fail</button></div>
+      <div class="formsection"><h4>Import daripada Google Sheet</h4><div class="grid2">
+        <div class="full"><label>Pautan Google Sheet</label><input id="imSheetUrl" placeholder="https://docs.google.com/spreadsheets/d/... "></div>
+        <div><label>Nama Tab Sumber</label><input id="imSheetTab" placeholder="Contoh: DSKP_T1"></div>
+        <div style="align-self:end"><button class="btn small" onclick="importKurikulumSheet()">Import Google Sheet</button></div>
+      </div></div>
+      <div id="imStatus" class="status"></div>
+    </div>
+    <div class="card"><h2>Eksport Data</h2><p class="sub">Eksport ke fail Excel untuk semakan atau cetak halaman sebagai PDF melalui pelayar.</p><div class="grid2">
+      <div><label>Data</label><select id="exJenis"><option value="DSKP">DSKP</option><option value="RPT">RPT</option><option value="BANK_SOALAN">Bank Soalan</option><option value="RPH">RPH</option><option value="MURID">Murid</option></select></div>
+      <div><label>Tingkatan</label><select id="exT"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+      <div><label>Kelas (RPH/Murid)</label><input id="exClass" placeholder="Pilihan"></div>
+      <div class="actions" style="align-self:end"><button class="btn small" onclick="exportDataExcel()">Eksport Excel</button><button class="btn small secondary" onclick="window.print()">Cetak / PDF</button></div>
+    </div><div id="exStatus" class="status"></div></div>
+    <div class="card"><h2>Sandaran</h2><p class="sub">Salinan Sheet disimpan dalam folder “Sandaran myPI KSSM” di Google Drive.</p><div class="actions"><button class="btn small" onclick="createBackupUI()">Cipta Sandaran Sekarang</button><button class="btn small secondary" onclick="setupWeeklyBackupUI()">Aktifkan Sandaran Mingguan</button></div><div id="backupStatus" class="status"></div></div>
+    <div class="card"><h2>Akses Guru</h2><p class="sub">Pentadbir boleh tambah atau kemas kini akaun guru yang dibenarkan mengurus data portal.</p><div class="grid2">
+      <div><label>Emel</label><input id="userEmail" type="email" placeholder="nama@moe-dl.edu.my"></div>
+      <div><label>Nama</label><input id="userName" placeholder="Nama penuh"></div>
+      <div><label>Peranan</label><select id="userRole"><option>Guru</option><option>Admin</option></select></div>
+      <div><label>Status</label><select id="userState"><option>Aktif</option><option>Tidak Aktif</option></select></div>
+      <div class="full"><label>Catatan</label><input id="userNote" placeholder="Pilihan"></div>
+      <div class="full"><button class="btn small" onclick="savePortalUser()">Simpan Pengguna</button></div>
+    </div><div id="userStatus" class="status"></div><div id="userList" class="list" style="margin-top:10px"></div></div>
   </section>
 </div>
 
@@ -375,6 +419,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
   <button class="close" onclick="closeModal()">✕</button><div id="modalBody"></div>
 </div></div>
 
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>
 const INITIAL_PAGE=<?!= JSON.stringify(initialPage || 'dashboard') ?>;
 const INITIAL_CODE=<?!= JSON.stringify(initialCode || '') ?>;
@@ -413,6 +458,7 @@ function showPage(name){
   if(name==='analisis')loadAnalisis();
   if(name==='rekod-rph')loadRphRecords();
   if(name==='murid')loadStudents();
+  if(name==='data')loadPortalUsers();
   if(name==='jana'&&!JDATA)loadJanaOptions();
   if(name==='rph'&&!Object.keys(RPTDATA).length)loadRphOptions();
   history.replaceState(null,'',location.pathname+'?page='+encodeURIComponent(name));
@@ -432,7 +478,7 @@ function loadDashboard(){
   $('dSemak').textContent=d.menungguSemakan;$('dMurid').textContent=d.muridAktif;
   $('dashRph').innerHTML=(d.recentRph||[]).map(x=>`<div class="item"><div class="itemtitle">${esc(x.tajuk||'-')}</div><div class="meta">${esc(x.tarikh)} · T${esc(x.tingkatan)} ${esc(x.kelas)} · ${esc(x.status)}</div></div>`).join('')||emptyState('rph','Belum ada RPH','RPH terkini akan dipaparkan di sini.');
   $('dashQuiz').innerHTML=(d.recentQuiz||[]).map(x=>`<div class="item"><div class="itemtitle">${esc(x.tajuk||'-')}</div><div class="meta">T${esc(x.tingkatan)} · Kod ${esc(x.kod)} · ${esc(x.status)}</div></div>`).join('')||emptyState('quiz','Belum ada kuiz','Kuiz terkini akan dipaparkan di sini.');
- }).withFailureHandler(e=>console.error(e)).getDashboardData();
+ }).withFailureHandler(e=>console.error(e)).getDashboardData({tingkatan:$('dT').value,kelas:$('dClass').value});
 }
 
 /* Jana Soalan */
@@ -507,7 +553,7 @@ function submitStudentQuiz(){
  const answers={};STUDENTQUIZ.soalan.forEach(q=>{if(q.jenis.toLowerCase()==='objektif'){const e=document.querySelector(`input[name="mq_${CSS.escape(q.id)}"]:checked`);answers[q.id]=e?e.value:''}else{const e=$('mq_'+q.id);answers[q.id]=e?e.value:''}});
  const p={kodKuiz:STUDENTQUIZ.kodKuiz,nama:$('mName').value,idMurid:$('mId').value,kelas:$('mClass').value,answers};
  $('mResult').innerHTML='<span class="spinner"></span>Menghantar...';
- google.script.run.withSuccessHandler(d=>{$('mResult').textContent=`Jawapan dihantar.${d.autoMax?` Markah objektif: ${d.autoScore}/${d.autoMax}.`:''}${d.perluSemakan?` ${d.perluSemakan} jawapan menunggu semakan guru.`:''}`;loadDashboard()}).withFailureHandler(e=>fail('mResult',e)).submitQuiz(p);
+ google.script.run.withSuccessHandler(d=>{$('mResult').textContent=`Jawapan dihantar.${d.autoMax?` Markah objektif: ${d.autoScore}/${d.autoMax}.`:''}${d.perluSemakan?` ${d.perluSemakan} jawapan menunggu semakan guru.`:''}`;}).withFailureHandler(e=>fail('mResult',e)).submitQuiz(p);
 }
 
 /* Semak Jawapan */
@@ -525,7 +571,7 @@ function loadAnalisis(){
   $('aQuiz').innerHTML=d.byQuiz.map(x=>`<div class="item"><div class="itemtitle">${esc(x.tajuk)} <span class="tag" style="margin-left:6px">T${x.tingkatan}</span></div><div class="bar"><i style="width:${x.purata}%"></i></div><div class="meta">${x.purata}% purata · ${x.respons} respons · ${x.pending} belum semak</div></div>`).join('')||emptyState('chart','Belum ada respons kuiz','Data prestasi akan terpapar selepas murid menjawab kuiz.');
   $('aTopic').innerHTML=d.weakTopics.map(x=>`<div class="item"><div class="itemtitle">${esc(x.tajuk)}</div><div class="meta">${esc(x.bidang)} · ${x.percent}% · Perlu pengukuhan</div><div class="bar"><i style="width:${x.percent}%"></i></div></div>`).join('')||emptyState('chart','Belum cukup data','Data topik lemah akan terpapar apabila murid mula menjawab kuiz.');
   $('aStudents').innerHTML=(d.intervention.length?`<div class="meta" style="margin-bottom:8px">Ambang intervensi: bawah ${d.threshold}%</div>`:'')+(d.intervention.map(x=>`<div class="item"><div class="itemtitle">${esc(x.nama)}</div><div class="meta">${esc(x.kelas)} · ${x.purata}% purata · ${x.bilKuiz} kuiz</div></div>`).join('')||emptyState('users','Tiada murid di bawah ambang','Semua murid mencapai tahap purata yang baik.'));
- }).withFailureHandler(e=>console.error(e)).getAnalisisData();
+ }).withFailureHandler(e=>console.error(e)).getAnalisisData({tingkatan:$('aT').value,kelas:$('aClass').value});
 }
 
 /* Jana RPH */
@@ -569,16 +615,59 @@ function loadStudents(){
  $('stuList').innerHTML=skeletonList(3);
  google.script.run.withSuccessHandler(rows=>{STUROWS=rows;$('stuList').innerHTML=rows.map((x,i)=>`<div class="item"><div class="actions" style="justify-content:space-between"><div><div class="itemtitle">${esc(x.nama)}</div><div class="meta">${esc(x.id)} · T${x.tingkatan} ${esc(x.kelas)}</div></div><div class="actions">${statusBadge(x.status)}<button class="btn small secondary" onclick="openStudentEditor(STUROWS[${i}])">Edit</button></div></div></div>`).join('')||emptyState('users','Belum ada murid','Tambah murid untuk mula mengurus rekod prestasi.')}).withFailureHandler(e=>console.error(e)).getMuridData({query:$('stuSearch').value,tingkatan:$('stuTFilter').value})}
 function openStudentEditor(x){
- x=x||{id:'',nama:'',tingkatan:4,kelas:'',kontak:'',status:'Aktif'};
- openModal(`<h2>${x.id?'Edit Murid':'Tambah Murid'}</h2><input type="hidden" id="esId" value="${attr(x.id)}"><label>Nama</label><input id="esName" value="${attr(x.nama)}"><div class="grid2"><div><label>Tingkatan</label><select id="esT"><option>4</option><option>5</option></select></div><div><label>Kelas</label><input id="esClass" value="${attr(x.kelas)}"></div></div><label>Telefon / Emel</label><input id="esContact" value="${attr(x.kontak)}"><label>Status</label><select id="esStatus"><option>Aktif</option><option>Tidak Aktif</option></select><button class="btn" style="margin-top:10px" onclick="saveStudent()">Simpan</button>`);
+ x=x||{id:'',nama:'',tingkatan:1,kelas:'',kontak:'',status:'Aktif'};
+ openModal(`<h2>${x.id?'Edit Murid':'Tambah Murid'}</h2><input type="hidden" id="esId" value="${attr(x.id)}"><label>Nama</label><input id="esName" value="${attr(x.nama)}"><div class="grid2"><div><label>Tingkatan</label><select id="esT"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div><div><label>Kelas</label><input id="esClass" value="${attr(x.kelas)}"></div></div><label>Telefon / Emel</label><input id="esContact" value="${attr(x.kontak)}"><label>Status</label><select id="esStatus"><option>Aktif</option><option>Tidak Aktif</option></select><button class="btn" style="margin-top:10px" onclick="saveStudent()">Simpan</button>`);
  $('esT').value=String(x.tingkatan);$('esStatus').value=x.status;
 }
 function saveStudent(){const p={id:$('esId').value,nama:$('esName').value,tingkatan:Number($('esT').value),kelas:$('esClass').value,kontak:$('esContact').value,status:$('esStatus').value};google.script.run.withSuccessHandler(()=>{closeModal();loadStudents();loadDashboard()}).withFailureHandler(e=>alert(e.message||e)).saveMurid(p)}
 
+/* Data: import, eksport dan sandaran */
+function importKurikulumFile(){
+ const file=$('imFile').files[0];
+ if(!file)return alert('Pilih fail Excel atau CSV dahulu.');
+ if(!window.XLSX)return fail('imStatus','Pustaka Excel tidak dapat dimuatkan. Sila gunakan import Google Sheet atau cuba semula.');
+ const reader=new FileReader();$('imStatus').innerHTML='<span class="spinner"></span>Membaca fail...';
+ reader.onload=e=>{try{
+   const wb=XLSX.read(e.target.result,{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];
+   const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+   const p={jenis:$('imJenis').value,tingkatan:$('imT').value,mode:$('imMode').value,rows:rows,sumberUrl:file.name};
+   $('imStatus').innerHTML='<span class="spinner"></span>Mengimport...';
+   google.script.run.withSuccessHandler(d=>{$('imStatus').textContent=`Siap: ${d.saved} rekod diimport${d.skipped?`, ${d.skipped} rekod bertindih`:''}.`;loadJanaOptions();loadRphOptions();}).withFailureHandler(e=>fail('imStatus',e)).importKurikulumRows(p);
+  }catch(err){fail('imStatus',err)}};
+ reader.onerror=()=>fail('imStatus','Fail tidak dapat dibaca.');reader.readAsArrayBuffer(file);
+}
+function importKurikulumSheet(){
+ const p={jenis:$('imJenis').value,tingkatan:$('imT').value,mode:$('imMode').value,urlSumber:$('imSheetUrl').value,tabSumber:$('imSheetTab').value};
+ if(!p.urlSumber||!p.tabSumber)return alert('Masukkan pautan Google Sheet dan nama tab sumber.');
+ $('imStatus').innerHTML='<span class="spinner"></span>Mengimport daripada Google Sheet...';
+ google.script.run.withSuccessHandler(d=>{$('imStatus').textContent=`Siap: ${d.saved} rekod diimport${d.skipped?`, ${d.skipped} rekod bertindih`:''}.`;loadJanaOptions();loadRphOptions();}).withFailureHandler(e=>fail('imStatus',e)).importKurikulumFromSheet(p);
+}
+function exportDataExcel(){
+ if(!window.XLSX)return fail('exStatus','Pustaka Excel tidak dapat dimuatkan. Sila cuba semula.');
+ const p={jenis:$('exJenis').value,tingkatan:$('exT').value,kelas:$('exClass').value};$('exStatus').innerHTML='<span class="spinner"></span>Menyediakan eksport...';
+ google.script.run.withSuccessHandler(d=>{const wb=XLSX.utils.book_new(),ws=XLSX.utils.aoa_to_sheet([d.headers].concat(d.rows));XLSX.utils.book_append_sheet(wb,ws,d.sheetName.slice(0,31));XLSX.writeFile(wb,d.filename);$('exStatus').textContent=`Eksport siap: ${d.rows.length} rekod.`;}).withFailureHandler(e=>fail('exStatus',e)).getExportData(p);
+}
+function createBackupUI(){
+ $('backupStatus').innerHTML='<span class="spinner"></span>Mencipta sandaran...';
+ google.script.run.withSuccessHandler(d=>{$('backupStatus').innerHTML=`Sandaran siap: <a href="${attr(d.url)}" target="_blank" rel="noopener">${esc(d.name)}</a>`;}).withFailureHandler(e=>fail('backupStatus',e)).createBackupNow();
+}
+function setupWeeklyBackupUI(){
+ $('backupStatus').innerHTML='<span class="spinner"></span>Menetapkan sandaran mingguan...';
+ google.script.run.withSuccessHandler(d=>{$('backupStatus').textContent=d.message;}).withFailureHandler(e=>fail('backupStatus',e)).setupWeeklyBackup();
+}
+function loadPortalUsers(){
+ const list=$('userList');if(!list)return;list.innerHTML=skeletonList(2);$('userStatus').textContent='';
+ google.script.run.withSuccessHandler(rows=>{list.innerHTML=rows.map(x=>`<div class="item"><div class="itemtitle">${esc(x.nama)} <span class="tag">${esc(x.peranan)}</span> ${statusBadge(x.status)}</div><div class="meta">${esc(x.email)}${x.catatan?` · ${esc(x.catatan)}`:''}</div></div>`).join('')||emptyState('users','Tiada pengguna','Tambah akaun guru untuk memberi akses.');}).withFailureHandler(e=>{list.innerHTML='';fail('userStatus',e)}).getPenggunaData();
+}
+function savePortalUser(){
+ const p={email:$('userEmail').value,nama:$('userName').value,peranan:$('userRole').value,status:$('userState').value,catatan:$('userNote').value};
+ $('userStatus').innerHTML='<span class="spinner"></span>Menyimpan pengguna...';
+ google.script.run.withSuccessHandler(d=>{$('userStatus').textContent=`Pengguna ${d.email} disimpan.`;$('userEmail').value='';$('userName').value='';$('userNote').value='';loadPortalUsers();}).withFailureHandler(e=>fail('userStatus',e)).savePengguna(p);
+}
+
 /* Startup */
-loadJanaOptions();loadRphOptions();loadQuizBank();
 if(INITIAL_CODE){$('mCode').value=INITIAL_CODE;showPage('kuiz');setTimeout(loadStudentQuiz,300)}
-else showPage(['jana','bank','guru-kuiz','kuiz','semak-jawapan','analisis','rph','rekod-rph','murid','dashboard'].includes(INITIAL_PAGE)?INITIAL_PAGE:'dashboard');
+else {loadJanaOptions();loadRphOptions();loadQuizBank();showPage(['jana','bank','guru-kuiz','kuiz','semak-jawapan','analisis','rph','rekod-rph','murid','data','dashboard'].includes(INITIAL_PAGE)?INITIAL_PAGE:'dashboard');}
 </script>
 </body>
 </html>

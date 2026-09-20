@@ -1,4 +1,60 @@
 const SPREADSHEET_ID = '1I8Nanf7nlJyp_-Y1CsZs9yhsQKFHL_wg5WEfC1mDTe0';
+const APP_NAME = 'myPI KSSM';
+const TINGKATAN_AKTIF = [1, 2, 3, 4, 5];
+
+function assertTingkatan_(tingkatan) {
+  const value = Number(tingkatan);
+  if (!TINGKATAN_AKTIF.includes(value)) {
+    throw new Error('Pilih Tingkatan 1 hingga 5.');
+  }
+  return value;
+}
+
+function getPortalUser_() {
+  const email = String(Session.getActiveUser().getEmail() || '').trim().toLowerCase();
+  if (!email) return { email: '', nama: '', peranan: '', status: '' };
+
+  const sh = getSS_().getSheetByName('Pengguna');
+  if (!sh || sh.getLastRow() < 2) return { email: email, nama: '', peranan: '', status: '' };
+  const row = sh.getRange(2, 1, sh.getLastRow() - 1, 6).getDisplayValues()
+    .find(r => String(r[0] || '').trim().toLowerCase() === email);
+  return row ? {
+    email: email,
+    nama: String(row[1] || '').trim(),
+    peranan: String(row[2] || '').trim(),
+    status: String(row[3] || '').trim()
+  } : { email: email, nama: '', peranan: '', status: '' };
+}
+
+function assertGuru_() {
+  const user = getPortalUser_();
+  if (!user.email) {
+    throw new Error('Sila buka portal menggunakan akaun Google sekolah yang telah didaftarkan.');
+  }
+  if (user.status !== 'Aktif' || !['Admin', 'Guru'].includes(user.peranan)) {
+    throw new Error('Akses guru diperlukan. Minta pentadbir menambah emel anda dalam tab Pengguna.');
+  }
+  return user;
+}
+
+function assertAdmin_() {
+  const user = assertGuru_();
+  if (user.peranan !== 'Admin') {
+    throw new Error('Akses pentadbir diperlukan.');
+  }
+  return user;
+}
+
+function logAudit_(tindakan, butiran, status) {
+  const sh = getSS_().getSheetByName('Audit_Log');
+  if (!sh) return;
+  const user = getPortalUser_();
+  sh.appendRow([
+    Utilities.formatDate(new Date(), Session.getScriptTimeZone() || 'Asia/Kuala_Lumpur', 'yyyy-MM-dd HH:mm:ss'),
+    user.email || 'sistem', user.peranan || 'Sistem', tindakan,
+    String(butiran || '').slice(0, 1000), status || 'Berjaya'
+  ]);
+}
 
 function getSS_() {
   return SpreadsheetApp.openById(SPREADSHEET_ID);
@@ -18,9 +74,10 @@ function getGeminiApiKey_() {
 }
 
 function senaraiPilihanJanaSoalan() {
+  assertGuru_();
   const ss = getSS_();
   const out = {};
-  [4, 5].forEach(t => {
+  TINGKATAN_AKTIF.forEach(t => {
     const sh = ss.getSheetByName('DSKP_T' + t);
     const rows = sh.getRange(2, 1, Math.max(sh.getLastRow() - 1, 1), 9).getValues()
       .filter(r => r[0] && String(r[7]).trim() === 'Disemak');
@@ -70,16 +127,16 @@ function cariDSKP_(tingkatan, bidang, tajuk) {
 }
 
 function janaSoalanGemini(input) {
+  assertGuru_();
   input = input || {};
 
-  const tingkatan = Number(input.tingkatan);
+  const tingkatan = assertTingkatan_(input.tingkatan);
   const bidang = String(input.bidang || '').trim();
   const tajuk = String(input.tajuk || '').trim();
   const tahap = String(input.tahap || '').trim();
   const jenis = String(input.jenis || '').trim();
   const bilangan = Math.max(1, Math.min(Number(input.bilangan || 5), 20));
 
-  if (![4, 5].includes(tingkatan)) throw new Error('Tingkatan hanya 4 atau 5.');
   if (!bidang || !tajuk || !tahap || !jenis) throw new Error('Lengkapkan semua pilihan janaan.');
 
   const dskp = cariDSKP_(tingkatan, bidang, tajuk);
@@ -87,7 +144,7 @@ function janaSoalanGemini(input) {
   const apiKey = getGeminiApiKey_();
 
   const prompt = [
-    'Anda ialah pembina item Pendidikan Islam SPM KSSM Malaysia.',
+    'Anda ialah pembina item Pendidikan Islam KSSM Malaysia bagi Tingkatan 1 hingga 5.',
     'Gunakan HANYA konteks DSKP yang diberikan. Jangan cipta fakta agama di luar konteks.',
     '',
     'TINGKATAN: ' + tingkatan,
@@ -174,6 +231,7 @@ function extractGeminiText_(json) {
 }
 
 function simpanSoalanKeBank(payload) {
+  assertGuru_();
   if (!payload || !payload.meta || !Array.isArray(payload.soalan)) {
     throw new Error('Payload soalan tidak sah.');
   }
@@ -209,10 +267,12 @@ function simpanSoalanKeBank(payload) {
   if (!rows.length) return { saved: 0 };
 
   sh.getRange(sh.getLastRow() + 1, 1, rows.length, rows[0].length).setValues(rows);
+  logAudit_('JANA_SOALAN', rows.length + ' soalan baharu disimpan ke Bank_Soalan.', 'Berjaya');
   return { saved: rows.length, ids: rows.map(r => r[0]) };
 }
 
 function janaDanSimpanSoalan(input) {
+  assertGuru_();
   const hasil = janaSoalanGemini(input);
   const simpan = simpanSoalanKeBank(hasil);
   return { hasil: hasil, simpan: simpan };
@@ -221,10 +281,11 @@ function janaDanSimpanSoalan(input) {
 
 
 /* =========================
-   MODUL KUIZ myPI SPM
+   MODUL KUIZ myPI KSSM
    ========================= */
 
 function getApprovedQuestionOptions() {
+  assertGuru_();
   const sh = getSS_().getSheetByName('Bank_Soalan');
   const last = sh.getLastRow();
   if (last < 2) return [];
@@ -244,6 +305,7 @@ function getApprovedQuestionOptions() {
 }
 
 function createQuiz(input) {
+  assertGuru_();
   input = input || {};
   const tajukKuiz = String(input.tajukKuiz || '').trim();
   const tingkatan = Number(input.tingkatan);
@@ -254,7 +316,7 @@ function createQuiz(input) {
   const bilangan = Math.max(1, Math.min(Number(input.bilangan || 10), 50));
 
   if (!tajukKuiz) throw new Error('Masukkan Tajuk Kuiz.');
-  if (![4,5].includes(tingkatan)) throw new Error('Pilih Tingkatan 4 atau 5.');
+  assertTingkatan_(tingkatan);
 
   const bank = getApprovedQuestionOptions().filter(q =>
     q.tingkatan === tingkatan &&
@@ -296,6 +358,7 @@ function createQuiz(input) {
     '',
     'Dijana daripada Bank_Soalan berstatus Lulus'
   ]]);
+  logAudit_('CIPTA_KUIZ', quizId + ' · ' + tajukKuiz + ' · Tingkatan ' + tingkatan, 'Berjaya');
 
   return {
     idKuiz: quizId,
@@ -483,9 +546,10 @@ function checkObjective_(studentAnswer, correctAnswer, options) {
    ========================= */
 
 function getRPHOptions() {
+  assertGuru_();
   const ss = getSS_();
   const result = {};
-  [4,5].forEach(t => {
+  TINGKATAN_AKTIF.forEach(t => {
     const sh = ss.getSheetByName('RPT_T' + t);
     const last = sh.getLastRow();
     const rows = last > 1 ? sh.getRange(2,1,last-1,10).getDisplayValues() : [];
@@ -618,15 +682,15 @@ function generateStructuredGemini_(prompt, schema) {
 }
 
 function janaRPH(input) {
+  assertGuru_();
   input = input || {};
-  const tingkatan = Number(input.tingkatan);
+  const tingkatan = assertTingkatan_(input.tingkatan);
   const rptId = String(input.rptId || '').trim();
   const kelas = String(input.kelas || '').trim();
   const tarikh = String(input.tarikh || '').trim();
   const tempoh = Math.max(30, Math.min(Number(input.tempoh || 60), 120));
   const catatanGuru = String(input.catatanGuru || '').trim();
 
-  if (![4,5].includes(tingkatan)) throw new Error('Pilih Tingkatan 4 atau 5.');
   if (!rptId) throw new Error('Pilih minggu/tajuk RPT.');
   if (!kelas) throw new Error('Masukkan kelas.');
   if (!tarikh) throw new Error('Pilih tarikh PdP.');
@@ -703,6 +767,7 @@ function janaRPH(input) {
 }
 
 function simpanRPH(payload) {
+  assertGuru_();
   if (!payload || !payload.meta || !payload.rph) throw new Error('Data RPH tidak sah.');
   const m = payload.meta, r = payload.rph;
   const sh = getSS_().getSheetByName('RPH');
@@ -726,11 +791,13 @@ function simpanRPH(payload) {
     'Draf',
     'Gemini AI · ' + m.model
   ]]);
+  logAudit_('JANA_RPH', id + ' · Tingkatan ' + m.tingkatan + ' · ' + m.kelas, 'Berjaya');
 
   return { id: id, saved: true };
 }
 
 function janaDanSimpanRPH(input) {
+  assertGuru_();
   const hasil = janaRPH(input);
   const simpan = simpanRPH(hasil);
   return { hasil: hasil, simpan: simpan };
@@ -740,7 +807,11 @@ function janaDanSimpanRPH(input) {
 /* =========================
    DASHBOARD GURU
    ========================= */
-function getDashboardData() {
+function getDashboardData(filters) {
+  assertGuru_();
+  filters = filters || {};
+  const tingkatanFilter = String(filters.tingkatan || '').trim();
+  const kelasFilter = String(filters.kelas || '').trim().toLowerCase();
   const ss = getSS_();
 
   const readRows = (sheetName, cols) => {
@@ -750,11 +821,21 @@ function getDashboardData() {
     return sh.getRange(2, 1, last - 1, cols).getValues().filter(r => r[0] !== '');
   };
 
-  const bank = readRows('Bank_Soalan', 16);
-  const kuiz = readRows('Kuiz', 15);
-  const jawapan = readRows('Jawapan_Murid', 12);
-  const rph = readRows('RPH', 16);
-  const murid = readRows('Murid', 6);
+  const bank = readRows('Bank_Soalan', 16).filter(r => !tingkatanFilter || String(r[1]) === tingkatanFilter);
+  const kuiz = readRows('Kuiz', 15).filter(r => !tingkatanFilter || String(r[2]) === tingkatanFilter);
+  const rph = readRows('RPH', 16).filter(r =>
+    (!tingkatanFilter || String(r[2]) === tingkatanFilter) &&
+    (!kelasFilter || String(r[3] || '').toLowerCase() === kelasFilter)
+  );
+  const murid = readRows('Murid', 6).filter(r =>
+    (!tingkatanFilter || String(r[2]) === tingkatanFilter) &&
+    (!kelasFilter || String(r[3] || '').toLowerCase() === kelasFilter)
+  );
+  const quizById = new Map(kuiz.map(r => [String(r[0]), r]));
+  const jawapan = readRows('Jawapan_Murid', 12).filter(r => {
+    const quiz = quizById.get(String(r[1] || ''));
+    return !!quiz && (!kelasFilter || String(r[4] || '').toLowerCase() === kelasFilter);
+  });
 
   const totalSoalan = bank.length;
   const soalanLulus = bank.filter(r => String(r[14]).trim() === 'Lulus').length;
@@ -855,6 +936,7 @@ function findRowById_(sheet, id, col) {
 /* ---------- Bank Soalan: semak, edit, lulus/tolak ---------- */
 
 function getBankSemakanData(filters) {
+  assertGuru_();
   filters = filters || {};
   const sh = getSS_().getSheetByName('Bank_Soalan');
   const last = sh.getLastRow();
@@ -897,6 +979,7 @@ function getBankSemakanData(filters) {
 }
 
 function saveBankQuestion(payload) {
+  assertGuru_();
   payload = payload || {};
   const id = String(payload.id || '').trim();
   if (!id) throw new Error('ID soalan tiada.');
@@ -921,6 +1004,7 @@ function saveBankQuestion(payload) {
     status,
     markah
   ]]);
+  logAudit_('SEMAK_SOALAN', id + ' · Status: ' + status, 'Berjaya');
 
   return { saved: true, id: id, status: status };
 }
@@ -928,6 +1012,7 @@ function saveBankQuestion(payload) {
 /* ---------- Pengurusan Murid ---------- */
 
 function getMuridData(filters) {
+  assertGuru_();
   filters = filters || {};
   const sh = getSS_().getSheetByName('Murid');
   const last = sh.getLastRow();
@@ -952,6 +1037,7 @@ function getMuridData(filters) {
 }
 
 function saveMurid(payload) {
+  assertGuru_();
   payload = payload || {};
   const sh = getSS_().getSheetByName('Murid');
   let id = String(payload.id || '').trim();
@@ -962,7 +1048,7 @@ function saveMurid(payload) {
   const status = ['Aktif','Tidak Aktif'].includes(String(payload.status)) ? String(payload.status) : 'Aktif';
 
   if (!nama) throw new Error('Masukkan nama murid.');
-  if (![4,5].includes(tingkatan)) throw new Error('Tingkatan mesti 4 atau 5.');
+  assertTingkatan_(tingkatan);
   if (!kelas) throw new Error('Masukkan kelas.');
 
   if (id) {
@@ -973,6 +1059,7 @@ function saveMurid(payload) {
     id = nextMuridId_();
     sh.getRange(sh.getLastRow()+1,1,1,6).setValues([[id,nama,tingkatan,kelas,kontak,status]]);
   }
+  logAudit_('SIMPAN_MURID', id + ' · Tingkatan ' + tingkatan + ' · ' + kelas, 'Berjaya');
   return { saved:true, id:id };
 }
 
@@ -991,6 +1078,7 @@ function nextMuridId_() {
 /* ---------- Pengurusan Kuiz ---------- */
 
 function getQuizManagerData() {
+  assertGuru_();
   const sh = getSS_().getSheetByName('Kuiz');
   const last = sh.getLastRow();
   if (last < 2) return [];
@@ -1012,17 +1100,20 @@ function getQuizManagerData() {
 }
 
 function updateQuizStatus(id, status) {
+  assertGuru_();
   if (!['Draf','Aktif','Tamat'].includes(String(status))) throw new Error('Status kuiz tidak sah.');
   const sh = getSS_().getSheetByName('Kuiz');
   const row = findRowById_(sh, id, 1);
   if (!row) throw new Error('Kuiz tidak dijumpai.');
   sh.getRange(row,11).setValue(String(status));
+  logAudit_('STATUS_KUIZ', String(id) + ' · ' + String(status), 'Berjaya');
   return { saved:true, id:id, status:status };
 }
 
 /* ---------- Semakan jawapan Struktur/Esei ---------- */
 
 function getManualReviewData(filters) {
+  assertGuru_();
   filters = filters || {};
   const ss = getSS_();
   const js = ss.getSheetByName('Jawapan_Murid');
@@ -1083,6 +1174,7 @@ function getManualReviewData(filters) {
 }
 
 function saveManualMark(payload) {
+  assertGuru_();
   payload = payload || {};
   const row = Number(payload.sheetRow);
   if (!row || row < 2) throw new Error('Baris jawapan tidak sah.');
@@ -1095,12 +1187,17 @@ function saveManualMark(payload) {
   const status = markah >= max ? 'Betul' : (markah <= 0 ? 'Salah' : 'Disemak');
 
   sh.getRange(row,9,1,4).setValues([[markah,status,max,catatan]]);
+  logAudit_('SEMAK_JAWAPAN', 'Baris ' + row + ' · ' + markah + '/' + max, 'Berjaya');
   return { saved:true, row:row, markah:markah, max:max };
 }
 
 /* ---------- Analisis Prestasi ---------- */
 
-function getAnalisisData() {
+function getAnalisisData(filters) {
+  assertGuru_();
+  filters = filters || {};
+  const tingkatanFilter = String(filters.tingkatan || '').trim();
+  const kelasFilter = String(filters.kelas || '').trim().toLowerCase();
   const ss = getSS_();
   const qz = ss.getSheetByName('Kuiz');
   const js = ss.getSheetByName('Jawapan_Murid');
@@ -1110,7 +1207,9 @@ function getAnalisisData() {
   const jRows = js.getLastRow() > 1 ? js.getRange(2,1,js.getLastRow()-1,12).getValues() : [];
   const bRows = bank.getLastRow() > 1 ? bank.getRange(2,1,bank.getLastRow()-1,16).getValues() : [];
 
-  const qMap = new Map(qRows.filter(r=>r[0]).map(r=>[String(r[0]),r]));
+  const qMap = new Map(qRows
+    .filter(r => r[0] && (!tingkatanFilter || String(r[2]) === tingkatanFilter))
+    .map(r=>[String(r[0]),r]));
   const bMap = new Map(bRows.filter(r=>r[0]).map(r=>[String(r[0]),r]));
   const threshold = Number(getSetting_('INTERVENSI_MARKAH','50')) || 50;
 
@@ -1122,6 +1221,7 @@ function getAnalisisData() {
     if (!r[1]) return;
     const qid = String(r[1]);
     const q = qMap.get(qid);
+    if (!q || (kelasFilter && String(r[4] || '').trim().toLowerCase() !== kelasFilter)) return;
     const sid = String(r[2] || '') || (String(r[3]||'')+'|'+String(r[4]||''));
     const attemptKey = qid+'|'+sid;
 
@@ -1222,7 +1322,10 @@ function getAnalisisData() {
     threshold,
     jumlahRespons:Object.keys(attempts).length,
     purataKeseluruhan:overall,
-    menungguSemakan:jRows.filter(r=>String(r[9]||'')==='Semakan Guru').length,
+    menungguSemakan:jRows.filter(r => {
+      const q = qMap.get(String(r[1] || ''));
+      return q && (!kelasFilter || String(r[4] || '').trim().toLowerCase() === kelasFilter) && String(r[9] || '') === 'Semakan Guru';
+    }).length,
     bilIntervensi:intervention.length,
     byQuiz:byQuiz.slice(0,50),
     weakTopics:topics.slice(0,12),
@@ -1234,6 +1337,7 @@ function getAnalisisData() {
 /* ---------- Rekod RPH ---------- */
 
 function getRPHRecords(filters) {
+  assertGuru_();
   filters = filters || {};
   const sh = getSS_().getSheetByName('RPH');
   const last = sh.getLastRow();
@@ -1270,6 +1374,7 @@ function getRPHRecords(filters) {
 }
 
 function updateRPHRecord(payload) {
+  assertGuru_();
   payload = payload || {};
   const id = String(payload.id || '').trim();
   const sh = getSS_().getSheetByName('RPH');
@@ -1287,7 +1392,252 @@ function updateRPHRecord(payload) {
     String(payload.refleksi || ''),
     status
   ]]);
+  logAudit_('KEMAS_KINI_RPH', id + ' · Status: ' + status, 'Berjaya');
   return {saved:true,id:id,status:status};
+}
+
+/* ---------- Import, eksport dan sandaran ---------- */
+
+function getPenggunaData() {
+  assertAdmin_();
+  const sh = getSS_().getSheetByName('Pengguna');
+  if (!sh || sh.getLastRow() < 2) return [];
+  return sh.getRange(2, 1, sh.getLastRow() - 1, 6).getDisplayValues()
+    .filter(r => String(r[0] || '').trim())
+    .map(r => ({
+      email: String(r[0] || '').trim(),
+      nama: String(r[1] || '').trim(),
+      peranan: String(r[2] || '').trim(),
+      status: String(r[3] || '').trim(),
+      catatan: String(r[4] || '').trim(),
+      dikemasKini: String(r[5] || '').trim()
+    }));
+}
+
+function savePengguna(payload) {
+  const admin = assertAdmin_();
+  payload = payload || {};
+  const email = String(payload.email || '').trim().toLowerCase();
+  const nama = String(payload.nama || '').trim();
+  const peranan = ['Admin', 'Guru'].includes(String(payload.peranan)) ? String(payload.peranan) : 'Guru';
+  const status = ['Aktif', 'Tidak Aktif'].includes(String(payload.status)) ? String(payload.status) : 'Aktif';
+  const catatan = String(payload.catatan || '').trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('Emel pengguna tidak sah.');
+  if (!nama) throw new Error('Masukkan nama pengguna.');
+
+  const sh = getSS_().getSheetByName('Pengguna');
+  const values = sh.getLastRow() > 1 ? sh.getRange(2, 1, sh.getLastRow() - 1, 1).getDisplayValues().flat() : [];
+  const index = values.findIndex(v => String(v || '').trim().toLowerCase() === email);
+  const record = [email, nama, peranan, status, catatan, Utilities.formatDate(new Date(), 'Asia/Kuala_Lumpur', 'yyyy-MM-dd HH:mm:ss')];
+  if (index >= 0) sh.getRange(index + 2, 1, 1, 6).setValues([record]);
+  else sh.getRange(sh.getLastRow() + 1, 1, 1, 6).setValues([record]);
+  logAudit_('SIMPAN_PENGGUNA', email + ' · ' + peranan + ' · oleh ' + admin.email, 'Berjaya');
+  return { saved: true, email: email };
+}
+
+function normaliseHeader_(value) {
+  return String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+function findHeaderIndex_(headers, aliases) {
+  const normalised = headers.map(normaliseHeader_);
+  for (let i = 0; i < aliases.length; i++) {
+    const index = normalised.indexOf(normaliseHeader_(aliases[i]));
+    if (index !== -1) return index;
+  }
+  return -1;
+}
+
+function getCell_(row, index, fallback) {
+  const value = index >= 0 && row[index] !== undefined && row[index] !== null
+    ? String(row[index]).trim()
+    : '';
+  return value || (fallback || '');
+}
+
+function buildKurikulumRows_(input) {
+  const jenis = String(input.jenis || '').trim().toUpperCase();
+  const tingkatan = assertTingkatan_(input.tingkatan);
+  const rawRows = Array.isArray(input.rows) ? input.rows : [];
+  const rows = rawRows.filter(r => Array.isArray(r) && r.some(v => String(v || '').trim() !== ''));
+  if (rows.length < 2) throw new Error('Fail atau Sheet sumber mesti mengandungi tajuk lajur dan sekurang-kurangnya satu rekod.');
+
+  const headers = rows[0];
+  const data = rows.slice(1);
+  const indexes = {
+    id: findHeaderIndex_(headers, ['ID', 'Kod']),
+    bidang: findHeaderIndex_(headers, ['Bidang']),
+    tajuk: findHeaderIndex_(headers, ['Tajuk', 'Topik']),
+    sumber: findHeaderIndex_(headers, ['Sumber URL', 'URL', 'Sumber']),
+    status: findHeaderIndex_(headers, ['Status Semakan', 'Status']),
+    catatan: findHeaderIndex_(headers, ['Catatan', 'Nota'])
+  };
+
+  if (jenis === 'DSKP') {
+    indexes.sk = findHeaderIndex_(headers, ['Standard Kandungan', 'SK']);
+    indexes.sp = findHeaderIndex_(headers, ['Standard Pembelajaran', 'SP']);
+    if ([indexes.bidang, indexes.tajuk, indexes.sk, indexes.sp].some(i => i < 0)) {
+      throw new Error('Header DSKP diperlukan: Bidang, Tajuk, Standard Kandungan dan Standard Pembelajaran.');
+    }
+    return data.map((r, i) => [
+      getCell_(r, indexes.id, 'D' + tingkatan + '-' + String(i + 1).padStart(3, '0')),
+      tingkatan,
+      getCell_(r, indexes.bidang),
+      getCell_(r, indexes.tajuk),
+      getCell_(r, indexes.sk),
+      getCell_(r, indexes.sp),
+      getCell_(r, indexes.sumber, String(input.sumberUrl || '').trim()),
+      ['Belum Disemak','Disemak','Lulus','Tolak'].includes(getCell_(r, indexes.status)) ? getCell_(r, indexes.status) : 'Belum Disemak',
+      getCell_(r, indexes.catatan)
+    ]).filter(r => r[2] && r[3] && r[4] && r[5]);
+  }
+
+  if (jenis === 'RPT') {
+    indexes.tahun = findHeaderIndex_(headers, ['Tahun']);
+    indexes.minggu = findHeaderIndex_(headers, ['Minggu']);
+    indexes.tarikhMula = findHeaderIndex_(headers, ['Tarikh Mula', 'Mula']);
+    indexes.tarikhAkhir = findHeaderIndex_(headers, ['Tarikh Akhir', 'Akhir']);
+    indexes.sp = findHeaderIndex_(headers, ['Standard Pembelajaran', 'SP']);
+    if ([indexes.minggu, indexes.bidang, indexes.tajuk].some(i => i < 0)) {
+      throw new Error('Header RPT diperlukan: Minggu, Bidang dan Tajuk.');
+    }
+    const tahun = getSetting_('TAHUN_RPT', '2026');
+    return data.map((r, i) => [
+      getCell_(r, indexes.id, 'RPT' + tingkatan + '-' + String(i + 1).padStart(3, '0')),
+      getCell_(r, indexes.tahun, tahun),
+      tingkatan,
+      getCell_(r, indexes.minggu),
+      getCell_(r, indexes.tarikhMula),
+      getCell_(r, indexes.tarikhAkhir),
+      getCell_(r, indexes.bidang),
+      getCell_(r, indexes.tajuk),
+      getCell_(r, indexes.sp),
+      getCell_(r, indexes.catatan)
+    ]).filter(r => r[3] && r[6] && r[7]);
+  }
+
+  throw new Error('Jenis import mestilah DSKP atau RPT.');
+}
+
+function saveImportedKurikulum_(input) {
+  const user = assertGuru_();
+  const jenis = String(input.jenis || '').trim().toUpperCase();
+  const tingkatan = assertTingkatan_(input.tingkatan);
+  const output = buildKurikulumRows_(input);
+  if (!output.length) throw new Error('Tiada rekod yang lengkap untuk diimport.');
+
+  const sh = getSS_().getSheetByName(jenis + '_T' + tingkatan);
+  if (!sh) throw new Error('Tab sasaran tidak dijumpai.');
+  const width = jenis === 'DSKP' ? 9 : 10;
+  const mode = String(input.mode || 'Tambah').trim();
+  let saved = output;
+
+  if (mode === 'Ganti') {
+    if (sh.getLastRow() > 1) sh.getRange(2, 1, sh.getLastRow() - 1, width).clearContent();
+  } else {
+    const existing = sh.getLastRow() > 1
+      ? new Set(sh.getRange(2, 1, sh.getLastRow() - 1, 1).getDisplayValues().flat().map(String))
+      : new Set();
+    saved = output.filter(r => !existing.has(String(r[0])));
+  }
+  if (saved.length) sh.getRange(sh.getLastRow() + 1, 1, saved.length, width).setValues(saved);
+  logAudit_('IMPORT_' + jenis, 'Tingkatan ' + tingkatan + ' · ' + saved.length + ' rekod · ' + mode + ' · ' + user.email, 'Berjaya');
+  return { saved: saved.length, skipped: output.length - saved.length, jenis: jenis, tingkatan: tingkatan, mode: mode };
+}
+
+function importKurikulumRows(input) {
+  return saveImportedKurikulum_(input || {});
+}
+
+function spreadsheetIdFromUrl_(value) {
+  const match = String(value || '').match(/[a-zA-Z0-9_-]{20,}/);
+  if (!match) throw new Error('Pautan Google Sheet tidak sah.');
+  return match[0];
+}
+
+function importKurikulumFromSheet(input) {
+  assertGuru_();
+  input = input || {};
+  const tab = String(input.tabSumber || '').trim();
+  if (!tab) throw new Error('Masukkan nama tab sumber.');
+  const sourceUrl = String(input.urlSumber || '').trim();
+  const source = SpreadsheetApp.openById(spreadsheetIdFromUrl_(sourceUrl));
+  const sh = source.getSheetByName(tab);
+  if (!sh) throw new Error('Tab sumber tidak dijumpai: ' + tab);
+  input.rows = sh.getDataRange().getDisplayValues();
+  input.sumberUrl = sourceUrl;
+  return saveImportedKurikulum_(input);
+}
+
+function getExportData(input) {
+  assertGuru_();
+  input = input || {};
+  const jenis = String(input.jenis || '').trim().toUpperCase();
+  const tingkatan = String(input.tingkatan || '').trim();
+  const kelas = String(input.kelas || '').trim().toLowerCase();
+  let sheetName = '';
+  let tingkatanCol = -1;
+  let kelasCol = -1;
+
+  if (jenis === 'DSKP' || jenis === 'RPT') {
+    assertTingkatan_(tingkatan);
+    sheetName = jenis + '_T' + tingkatan;
+  } else if (jenis === 'BANK_SOALAN') {
+    sheetName = 'Bank_Soalan'; tingkatanCol = 1;
+  } else if (jenis === 'RPH') {
+    sheetName = 'RPH'; tingkatanCol = 2; kelasCol = 3;
+  } else if (jenis === 'MURID') {
+    sheetName = 'Murid'; tingkatanCol = 2; kelasCol = 3;
+  } else {
+    throw new Error('Pilih data DSKP, RPT, Bank Soalan, RPH atau Murid.');
+  }
+
+  const sh = getSS_().getSheetByName(sheetName);
+  const lastRow = sh.getLastRow();
+  const lastCol = sh.getLastColumn();
+  const values = sh.getRange(1, 1, Math.max(lastRow, 1), lastCol).getDisplayValues();
+  const headers = values.shift() || [];
+  const rows = values.filter(r => r.some(v => String(v || '').trim() !== ''))
+    .filter(r => (!tingkatan || tingkatanCol < 0 || String(r[tingkatanCol]) === tingkatan))
+    .filter(r => (!kelas || kelasCol < 0 || String(r[kelasCol] || '').trim().toLowerCase() === kelas));
+  logAudit_('EKSPORT_DATA', sheetName + ' · ' + rows.length + ' rekod', 'Berjaya');
+  return { sheetName: sheetName, headers: headers, rows: rows, filename: APP_NAME.replace(/[^a-z0-9]+/gi, '_') + '_' + sheetName + '_' + Utilities.formatDate(new Date(), 'Asia/Kuala_Lumpur', 'yyyyMMdd-HHmmss') + '.xlsx' };
+}
+
+function getBackupFolder_() {
+  const folderId = getSetting_('BACKUP_FOLDER_ID', '');
+  if (folderId) {
+    try { return DriveApp.getFolderById(folderId); } catch (e) {}
+  }
+  const name = 'Sandaran ' + APP_NAME;
+  const folders = DriveApp.getFoldersByName(name);
+  return folders.hasNext() ? folders.next() : DriveApp.createFolder(name);
+}
+
+function backupPortal_(jenis) {
+  const stamp = Utilities.formatDate(new Date(), 'Asia/Kuala_Lumpur', 'yyyyMMdd-HHmmss');
+  const copy = DriveApp.getFileById(SPREADSHEET_ID).makeCopy(APP_NAME + ' · Sandaran ' + stamp, getBackupFolder_());
+  logAudit_('SANDARAN_' + String(jenis || 'MANUAL').toUpperCase(), copy.getName(), 'Berjaya');
+  return { success: true, name: copy.getName(), url: copy.getUrl() };
+}
+
+function createBackupNow() {
+  assertGuru_();
+  return backupPortal_('manual');
+}
+
+function backupMingguan_() {
+  return backupPortal_('mingguan');
+}
+
+function setupWeeklyBackup() {
+  assertGuru_();
+  ScriptApp.getProjectTriggers()
+    .filter(t => t.getHandlerFunction() === 'backupMingguan_')
+    .forEach(t => ScriptApp.deleteTrigger(t));
+  ScriptApp.newTrigger('backupMingguan_').timeBased().everyWeeks(1).atHour(1).create();
+  logAudit_('TETAP_SANDARAN_MINGGUAN', 'Pencetus mingguan pada sekitar 1 pagi.', 'Berjaya');
+  return { success: true, message: 'Sandaran mingguan telah dijadualkan.' };
 }
 
 /* ---------- Web App: satu Portal SPA sahaja ---------- */
@@ -1297,6 +1647,6 @@ function doGet(e) {
   tpl.initialPage = (e && e.parameter && e.parameter.page) ? String(e.parameter.page) : 'dashboard';
   tpl.initialCode = (e && e.parameter && e.parameter.code) ? String(e.parameter.code) : '';
   return tpl.evaluate()
-    .setTitle('myPI SPM · Portal Pendidikan Islam')
+    .setTitle(APP_NAME + ' · Portal Pendidikan Islam')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }

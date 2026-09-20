@@ -1,4 +1,4 @@
-myPI SPM PWA — TEST REPORT
+myPI KSSM PWA — TEST REPORT
 
 PASS — manifest name
 PASS — manifest start_url

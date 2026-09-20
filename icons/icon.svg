@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">myPI KSSM</title>
+  <desc id="desc">Ikon Portal Pendidikan Islam myPI KSSM</desc>
+  <defs>
+    <linearGradient id="background" x1="48" y1="40" x2="464" y2="472" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4c1d95"/>
+      <stop offset="1" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="256" y1="126" x2="256" y2="226" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fde68a"/>
+      <stop offset="1" stop-color="#fbbf24"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="106" fill="url(#background)"/>
+  <circle cx="256" cy="256" r="184" fill="#fff" fill-opacity=".08"/>
+  <path d="M304 125c-59 14-96 74-82 134 13 55 61 91 115 91 19 0 37-4 53-12-24 35-63 58-108 58-74 0-134-60-134-134 0-69 52-126 119-133 13-2 25-2 37-4Z" fill="url(#gold)"/>
+  <path d="M256 183v70" stroke="#fde68a" stroke-width="15" stroke-linecap="round"/>
+  <path d="m224 220 32-37 32 37" fill="none" stroke="#fde68a" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M128 303c47-25 94-25 128 2v79c-35-28-81-27-128-2v-79Z" fill="#fff"/>
+  <path d="M384 303c-47-25-94-25-128 2v79c35-28 81-27 128-2v-79Z" fill="#f4eaff"/>
+  <path d="M256 307v78" stroke="#d8b4fe" stroke-width="9" stroke-linecap="round"/>
+  <path d="M153 330c28-10 53-9 77 3M359 330c-28-10-53-9-77 3" fill="none" stroke="#c4b5fd" stroke-width="8" stroke-linecap="round"/>
+</svg>
