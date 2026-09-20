@@ -53,9 +53,9 @@ button.secondary:hover{border-color:var(--accent);color:var(--accent);filter:non
 <button class="secondary" onclick="showSetup()">Tukar URL Web App</button>
 </div></div>
 <div id="setup" class="setup"><div class="card">
-<span class="badge">Tetapan pertama kali</span>
+<span class="badge">Tetapan URL</span>
 <h1>Sambungkan Web App myPI KSSM</h1>
-<p>Masukkan URL deployment Google Apps Script yang berakhir dengan <b>/exec</b>. Portal akan dibuka dalam halaman penuh bagi memastikan Dashboard berfungsi.</p>
+<p>URL portal standard telah ditetapkan. Tukar hanya jika URL deployment Apps Script baharu digunakan.</p>
 <input id="scriptUrl" placeholder="https://script.google.com/macros/s/.../exec">
 <button onclick="saveUrl()">Simpan & Buka Dashboard</button>
 <div class="hint">URL ini disimpan pada peranti ini sahaja.</div>
@@ -76,6 +76,7 @@ const offline=document.getElementById('offline');
 const statusEl=document.getElementById('netStatus');
 const installButton=document.getElementById('installButton');
 const KEY='mypi_apps_script_url';
+const DEFAULT_SCRIPT_URL='https://script.google.com/macros/s/AKfycbyMwPdU9861J4dlscB41usCQmVOLE-3grr9NpLHlOydDFSBTm94S5_8f7MlBaAMDHT1OQ/exec';
 let installPrompt=null;
 function normalizeUrl(u){
  u=(u||'').trim();
@@ -84,13 +85,13 @@ function normalizeUrl(u){
 }
 function loadPortal(){
  updateNetwork();
- const saved=localStorage.getItem(KEY)||'';
+ const saved=localStorage.getItem(KEY)||DEFAULT_SCRIPT_URL;
  if(!saved){showSetup();return}
  setup.style.display='none';offline.style.display='none';launcher.style.display='flex';
  if(new URL(location.href).searchParams.get('setup')!=='1')openPortal();
 }
 function portalUrl(){
- const saved=localStorage.getItem(KEY)||'';
+ const saved=localStorage.getItem(KEY)||DEFAULT_SCRIPT_URL;
  if(!saved)return '';
  const current=new URL(location.href),target=new URL(saved);
  const page=current.searchParams.get('page'),code=current.searchParams.get('code');
@@ -111,7 +112,7 @@ function saveUrl(){
 }
 function showSetup(){
  launcher.style.display='none';offline.style.display='none';setup.style.display='flex';
- document.getElementById('scriptUrl').value=localStorage.getItem(KEY)||'';
+ document.getElementById('scriptUrl').value=localStorage.getItem(KEY)||DEFAULT_SCRIPT_URL;
 }
 function updateNetwork(){
  const ok=navigator.onLine;statusEl.textContent=ok?'Online':'Offline';
