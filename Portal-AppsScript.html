@@ -243,16 +243,16 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
   <section id="page-jana" class="page">
     <div class="card"><h2>Jana Soalan AI</h2><p class="sub">Soalan dijana berdasarkan SK/SP DSKP yang telah disemak.</p>
       <div class="formsection"><h4>Kandungan DSKP</h4><div class="grid2">
-        <div><label>Tingkatan</label><select id="jT"><option value="">Pilih</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
-        <div><label>Bidang</label><select id="jB"><option value="">Pilih Tingkatan dahulu</option></select></div>
-        <div class="full"><label>Tajuk</label><select id="jTaj"><option value="">Pilih Bidang dahulu</option></select></div>
+        <div><label>Tingkatan</label><select id="jT" disabled><option value="">Memuatkan pilihan…</option></select></div>
+        <div><label>Bidang</label><select id="jB" disabled><option value="">Pilih Tingkatan dahulu</option></select></div>
+        <div class="full"><label>Tajuk</label><select id="jTaj" disabled><option value="">Pilih Bidang dahulu</option></select></div>
       </div></div>
       <div class="formsection"><h4>Tetapan Soalan</h4><div class="grid2">
-        <div><label>Tahap</label><select id="jTahap"></select></div>
-        <div><label>Jenis</label><select id="jJenis"></select></div>
+        <div><label>Tahap</label><select id="jTahap" disabled></select></div>
+        <div><label>Jenis</label><select id="jJenis" disabled></select></div>
         <div class="full"><label>Bilangan</label><input id="jBil" type="number" min="1" max="20" value="5"></div>
       </div></div>
-      <button class="btn" id="jBtn" onclick="janaSoalan()">Jana & Simpan</button>
+      <button class="btn" id="jBtn" onclick="janaSoalan()" disabled>Jana & Simpan</button>
       <div id="jStatus" class="status"></div><div id="jResult"></div>
     </div>
   </section>
@@ -483,14 +483,31 @@ function loadDashboard(){
 
 /* Jana Soalan */
 function loadJanaOptions(){
- google.script.run.withSuccessHandler(d=>{JDATA=d;$('jTahap').innerHTML=d.tahap.map(x=>`<option>${esc(x)}</option>`).join('');$('jJenis').innerHTML=d.jenis.map(x=>`<option>${esc(x)}</option>`).join('');$('jStatus').textContent='Model: '+d.model;}).withFailureHandler(e=>fail('jStatus',e)).senaraiPilihanJanaSoalan();
+ $('jStatus').innerHTML='<span class="spinner"></span>Memuatkan pilihan DSKP...';
+ google.script.run.withSuccessHandler(d=>{
+  JDATA=d;
+  $('jT').innerHTML='<option value="">Pilih</option>'+[1,2,3,4,5].map(x=>`<option>${x}</option>`).join('');
+  $('jTahap').innerHTML=d.tahap.map(x=>`<option>${esc(x)}</option>`).join('');
+  $('jJenis').innerHTML=d.jenis.map(x=>`<option>${esc(x)}</option>`).join('');
+  ['jT','jTahap','jJenis','jBtn'].forEach(id=>$(id).disabled=false);
+  $('jStatus').textContent='Model: '+d.model+' · Pilih Tingkatan untuk melihat DSKP yang telah disemak.';
+ }).withFailureHandler(e=>fail('jStatus',e)).senaraiPilihanJanaSoalan();
 }
 $('jT').addEventListener('change',()=>{
- const rows=(JDATA&&JDATA.dskp[$('jT').value])||[];const bs=[...new Set(rows.map(r=>r.bidang))];
- $('jB').innerHTML='<option value="">Pilih</option>'+bs.map(x=>`<option>${esc(x)}</option>`).join('');refreshJTaj();
+ const tingkatan=$('jT').value,rows=(JDATA&&JDATA.dskp[tingkatan])||[],bs=[...new Set(rows.map(r=>r.bidang))];
+ $('jB').disabled=!bs.length;
+ $('jTaj').disabled=true;$('jTaj').innerHTML='<option value="">Pilih Bidang dahulu</option>';
+ if(!tingkatan){$('jB').innerHTML='<option value="">Pilih Tingkatan dahulu</option>';return}
+ if(!bs.length){$('jB').innerHTML='<option value="">Tiada DSKP disemak</option>';$('jStatus').textContent='Tingkatan '+tingkatan+' belum mempunyai DSKP terperinci berstatus Disemak.';return}
+ $('jB').innerHTML='<option value="">Pilih</option>'+bs.map(x=>`<option>${esc(x)}</option>`).join('');
+ $('jStatus').textContent='Pilih Bidang dan Tajuk untuk meneruskan janaan soalan.';
 });
 $('jB').addEventListener('change',refreshJTaj);
-function refreshJTaj(){const rows=(JDATA&&JDATA.dskp[$('jT').value]||[]).filter(r=>r.bidang===$('jB').value);$('jTaj').innerHTML='<option value="">Pilih</option>'+rows.map(r=>`<option>${esc(r.tajuk)}</option>`).join('')}
+function refreshJTaj(){
+ const rows=(JDATA&&JDATA.dskp[$('jT').value]||[]).filter(r=>r.bidang===$('jB').value);
+ $('jTaj').disabled=!rows.length;
+ $('jTaj').innerHTML=rows.length?'<option value="">Pilih</option>'+rows.map(r=>`<option>${esc(r.tajuk)}</option>`).join(''):'<option value="">Pilih Bidang dahulu</option>';
+}
 function janaSoalan(){
  const input={tingkatan:$('jT').value,bidang:$('jB').value,tajuk:$('jTaj').value,tahap:$('jTahap').value,jenis:$('jJenis').value,bilangan:Number($('jBil').value||5)};
  if(!input.tingkatan||!input.bidang||!input.tajuk)return alert('Lengkapkan Tingkatan, Bidang dan Tajuk.');
